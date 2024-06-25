@@ -2,6 +2,3 @@
 frontend/node_modules/
 server/node_modules/
 
-# Ignore .env files in both frontend and server directories
-frontend/.env
-server/.env
