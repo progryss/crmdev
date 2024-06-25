@@ -83,7 +83,7 @@ export default function AddCustomer({ onBack }) {
     
     try {
       // Make the POST request to create an enquiry
-      const response = await axios.post(`${baseURL}/create-enquiry`, customerData);
+      const response = await axios.post(`https://crm.progryss.com/api/create-enquiry`, customerData);
       console.log('Enquiry sent successfully:', response.data);
       setCustomerName("");
       setEmail("");

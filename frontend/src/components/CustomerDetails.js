@@ -43,7 +43,7 @@ function CustomerDetails({ customer, onBack }) {
     
 
     try {
-      const response = await axios.put(`${baseURL}/update-enquiry/${customer._id}`)
+      const response = await axios.put(`https://crm.progryss.com/api/update-enquiry/${customer._id}`)
     } catch (error) {
       
     }

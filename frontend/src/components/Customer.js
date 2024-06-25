@@ -39,7 +39,7 @@ export default function Customer() {
   const baseURL = process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
-    fetch(`${baseURL}/get-enquiries`)
+    fetch(`https://crm.progryss.com/api/get-enquiries`)
       .then(response => response.json())
       .then(data => {
         if (data.length > 0) {
