@@ -5,8 +5,6 @@ import "react-resizable/css/styles.css";
 import CustomerDetails from "./CustomerDetails";
 import AddCustomer from "./AddCustomer";
 
-
-
 export default function Customer() {
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState([]);
@@ -187,7 +185,6 @@ export default function Customer() {
   return (
 
     <div className="container-fluid customer-container">
-     
       <div className="card card-block border-0 customer-table-css-main">
         <div className="card-body p-0">
           <div className="p-3 bg-light add-cutomer-section">
@@ -203,7 +200,7 @@ export default function Customer() {
                   <div>
                     <button
                       className="btn btn-primary me-2 add-customer-btn">
-                      <i class="fa fa-trash"></i>
+                      <i className="fa fa-trash"></i>
                     </button>
                     <button
                       className="btn btn-primary ml-3 add-customer-btn"
@@ -269,6 +266,7 @@ export default function Customer() {
               </div>
             </div>
           </div>
+
           <div className="table-responsive customerTable">
             <DragDropContext onDragEnd={onDragEnd}>
               <table className="table text-start customer-table-css">
@@ -394,6 +392,7 @@ export default function Customer() {
               </table>
             </DragDropContext>
           </div>
+
           {/* pagination */}
           {filteredResults.length > 0 && (
             <nav className="mt-3">
@@ -412,6 +411,7 @@ export default function Customer() {
               </ul>
             </nav>
           )}
+
         </div>
       </div>
     </div>

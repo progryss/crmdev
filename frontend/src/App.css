@@ -23,7 +23,11 @@
 .customerTable::-webkit-scrollbar-thumb:hover {
   background: #cbcbcb; 
 }
-
+.customerTable thead{
+  position: sticky;
+  top: -1px;
+  z-index: 1;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
