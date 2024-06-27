@@ -1,85 +1,113 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNotification } from "./NotificationContext"; 
+import { useNotification } from "./NotificationContext";
 
 function CustomerDetails({ customer, onBack }) {
 
-  const baseURL = process.env.REACT_APP_SERVER_URL;
+  const baseURL = process.env.REACT_APP_BASE_URL || 'https://crm.progryss.com';
+  const initialEditValues = {
+    date: customer.date,
+    name: customer.name,
+    email: customer.email,
+    country: customer.country,
+    phone: customer.phone,
+    message: customer.message,
+    page_url: customer.page_url,
+    comments: customer.comments
+  };
 
   const [comment, setComment] = useState("");
-  const [commentsList, setCommentsList] = useState([]);
-  const [editingIndex, setEditingIndex] = useState(null);
-  const [editingComment, setEditingComment] = useState("");
-
-  const { showNotification } = useNotification(); 
-
-  const localStorageKey = `comments_${customer.id || customer.name}`;
+  const [isReadOnly, setIsReadOnly] = useState(true);
+  const { showNotification } = useNotification();
+  const [editableValues, setEditableValues] = useState(initialEditValues);
+  const [flyObject,setFlyObject] = useState(initialEditValues);
 
   const handleCommentChange = (e) => {
     setComment(e.target.value);
   };
 
-  const handleEditCommentChange = (e) => {
-    setEditingComment(e.target.value);
+  const handleCommentDelete = (index) => {
+    editableValues.comments.splice(index, 1);
+    console.log(editableValues.comments)
+    setEditableValues((object) => ({
+      ...object,
+      comments: editableValues.comments
+    }))
   };
 
-  const handleCommentSubmit = async () => {
+  const editEnquiry = () => {
+    console.log('edit start');
+    setIsReadOnly(false);
+  }
 
+  const saveEnquiry = async () => {
+    console.log('enquiry save');
+    setEditableValues(flyObject)
+    setIsReadOnly(true);
+  }
+
+  const handleChange = (field, value) => {
+    setFlyObject(prev => ({ ...prev, [field]: value }));
+  };
+
+  const cancelEdit = () => {
+    setFlyObject(initialEditValues);
+    setIsReadOnly(true);
+  }
+
+  const deleteQuery = async()=>{
+
+    const userResponse = window.confirm("Are you sure you want to delete?");
+    if (userResponse) {
+      try {
+        const response = await axios.delete(`${baseURL}/api/delete-enquiry/${customer._id}`);
+        console.log(response)
+      } catch (error) {
+        console.log(error)
+      }
+      onBack()
+    }
+
+  }
+
+  useEffect(() => {
+    console.log('useeffect')
+    hit()
+  }, [editableValues])
+
+  async function hit() {
+    console.log(editableValues)
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+      const response = await axios.put(`${baseURL}/api/update-enquiry/${customer._id}`, editableValues, config);
+      console.log(response);
+    } catch (error) {
+      console.log('Error sending PUT request', error);
+    }
+  }
+
+  const handleCommentSubmit = async () => {
     if (comment.trim() !== "") {
       const now = new Date();
       const timestamp = now.toLocaleString();
-      const newComment = { text: comment, timestamp: timestamp };
-      const updatedCommentsList = [newComment, ...commentsList];
-      setCommentsList(updatedCommentsList);
+      const newComment = { comment_text: comment, comment_date: timestamp };
+      const updatedCommentsList = [newComment, ...editableValues.comments];
+
+      setEditableValues((object) => ({
+        ...object,
+        comments: updatedCommentsList
+      }));
+
       setComment("");
-      localStorage.setItem(localStorageKey, JSON.stringify(updatedCommentsList));
-      
-      // Show success notification
       showNotification('Comment added successfully!', 'success', 'green', 'white');
     } else {
       showNotification("Can't be blank!", "error", "red", "white");
     }
-
-    
-
-    try {
-      const response = await axios.put(`https://crm.progryss.com/api/update-enquiry/${customer._id}`)
-    } catch (error) {
-      
-    }
-
   };
-
-  const handleCommentDelete = (index) => {
-    const updatedCommentsList = commentsList.filter((_, i) => i !== index);
-    setCommentsList(updatedCommentsList);
-    localStorage.setItem(localStorageKey, JSON.stringify(updatedCommentsList));
-  };
-
-  const handleCommentEdit = (index) => {
-    setEditingIndex(index);
-    setEditingComment(commentsList[index].text);
-  };
-
-  const handleEditSubmit = (index) => {
-    if (editingComment.trim() !== "") {
-      const updatedCommentsList = commentsList.map((comment, i) =>
-        i === index ? { ...comment, text: editingComment } : comment
-      );
-      setCommentsList(updatedCommentsList);
-      setEditingIndex(null);
-      setEditingComment("");
-      localStorage.setItem(localStorageKey, JSON.stringify(updatedCommentsList));
-    }
-  };
-
-  const address = customer.address
-    ? customer.address.country ||
-      customer.address.city ||
-      customer.address.street ||
-      customer.address.suite ||
-      customer.address.zipcode
-    : "N/A";
 
   return (
     <div className="container-fluid customer-details">
@@ -103,15 +131,15 @@ function CustomerDetails({ customer, onBack }) {
           <div className="d-flex gap-5 align-items-center p-3">
             <div>
               <div className="label-title">Name:</div>
-              <div className="label-value">{customer.name}</div>
+              <div className="label-value">{flyObject.name}</div>
             </div>
             <div>
               <div className="label-title">Phone Number:</div>
-              <div className="label-value">{customer.phone}</div>
+              <div className="label-value">{flyObject.phone}</div>
             </div>
             <div>
               <div className="label-title">Email:</div>
-              <div className="label-value">{customer.email}</div>
+              <div className="label-value">{flyObject.email}</div>
             </div>
           </div>
         </div>
@@ -135,36 +163,42 @@ function CustomerDetails({ customer, onBack }) {
       <div className="customer-details-grid">
         <div className="card mb-3">
           <div className="card-body">
-            <div className="detail-tab-box">
-              <h5>Details</h5>
+            <div className="detail-tab-box d-flex justify-content-between">
+              <div>
+                <span>Details</span>
+              </div>
+              <div>
+
+                {!isReadOnly ? (<><button className="btn btn-primary me-2 btn-sm" onClick={cancelEdit}>Cancel</button><button className="btn btn-primary me-2 saveBtn btn-sm" onClick={saveEnquiry}>Update</button></>) : (<><button className='btn btn-link me-2 updateBtn' onClick={editEnquiry}><i className="fa fa-edit"></i></button><button className="btn btn-link text-danger me-2 deleteBtn" onClick={deleteQuery}><i className="fa fa-trash"></i></button></>)}
+              </div>
             </div>
             <div className="two-column-layout">
               <div className="first-column-box">
                 <div className="mb-4">
                   <div className="label-title">Name:</div>
-                  <div className="label-value">{customer.name}</div>
+                  <input className="label-value" onChange={(e) => handleChange('name', e.target.value)} value={flyObject.name} readOnly={isReadOnly} />
                 </div>
                 <div className="mb-4">
                   <div className="label-title">Country:</div>
-                  <div className="label-value">{customer.country}</div>
+                  <input className="label-value" onChange={(e) => handleChange('country', e.target.value)} readOnly={isReadOnly} value={flyObject.country} />
                 </div>
                 <div className="mb-4">
                   <div className="label-title">Message:</div>
-                  <div className="label-value">{customer.message || "N/A"}</div>
+                  <input className="label-value" onChange={(e) => handleChange('message', e.target.value)} readOnly={isReadOnly} value={flyObject.message || "N/A"} />
                 </div>
               </div>
               <div className="second-column-box">
                 <div className="mb-4">
                   <div className="label-title">Phone Number:</div>
-                  <div className="label-value">{customer.phone}</div>
+                  <input className="label-value" onChange={(e) => handleChange('phone', e.target.value)} readOnly={isReadOnly} value={flyObject.phone} />
                 </div>
                 <div className="mb-4">
                   <div className="label-title">Email:</div>
-                  <div className="label-value">{customer.email}</div>
+                  <input className="label-value" onChange={(e) => handleChange('email', e.target.value)} readOnly={isReadOnly} value={flyObject.email} />
                 </div>
                 <div className="mb-4">
                   <div className="label-title">Page URL:</div>
-                  <div className="label-value">{customer.page_url || "N/A"}</div>
+                  <input className="label-value" onChange={(e) => handleChange('page_url', e.target.value)} readOnly={isReadOnly} value={flyObject.page_url || "N/A"} />
                 </div>
               </div>
             </div>
@@ -188,54 +222,25 @@ function CustomerDetails({ customer, onBack }) {
               </button>
             </div>
             <div className="comment-box">
-              {customer.comments.length > 0 && (
+              {editableValues.comments.length > 0 && (
                 <>
-                  {customer.comments.map((comment, index) => (
+                  {editableValues.comments.map((comment, index) => (
                     <div key={index} className="card mb-3">
-                      <div className="card-body d-flex justify-content-between align-items-center">
-                        {editingIndex === index ? (
-                          <div className="w-100">
-                            <textarea
-                              rows="2"
-                              className="form-control mb-3"
-                              value={editingComment}
-                              onChange={handleEditCommentChange}
-                            ></textarea>
-                            <button
-                              className="btn btn-success me-2"
-                              onClick={() => handleEditSubmit(index)}
-                            >
-                              Save
-                            </button>
-                            <button
-                              className="btn btn-secondary"
-                              onClick={() => setEditingIndex(null)}
-                            >
-                              Cancel
-                            </button>
+                      <div className="card-body pb-1">
+
+                        <div>
+                          <div className="comment-text mb-2">{comment.comment_text}</div>
+                          <hr className="m-0 mt-3 mb-2" />
+                          <div className="comment-timestamp d-flex justify-content-between align-items-baseline">
+                            <div>
+                              <span className="fs-12">{comment.comment_date}</span>
+                            </div>
+                            <div>
+                              <button className="btn btn-link text-danger" onClick={(e) => handleCommentDelete(index)}><i className="fa fa-trash"></i></button>
+                            </div>
                           </div>
-                        ) : (
-                          <>
-                            <div>
-                              <div className="comment-text mb-2">{comment.comment_text}</div>
-                              <div className="comment-timestamp">{comment.comment_date}</div>
-                            </div>
-                            <div>
-                              <button
-                                className="btn btn-link text-primary me-2"
-                                onClick={() => handleCommentEdit(index)}
-                              >
-                                <i className="fa fa-edit"></i>
-                              </button>
-                              <button
-                                className="btn btn-link text-dark"
-                                onClick={() => handleCommentDelete(index)}
-                              >
-                                <i className="fa fa-trash"></i>
-                              </button>
-                            </div>
-                          </>
-                        )}
+                        </div>
+
                       </div>
                     </div>
                   ))}

@@ -41,8 +41,8 @@ export default function LoginPage({ handleLogin }) {
       return;
     }
 
-    const validUsername = 'crm';
-    const validPassword = 'CRM';
+    const validUsername = 'admin@progryss';
+    const validPassword = 'Jgw@13579';
 
     if (username !== validUsername) {
       setUsernameError('Invalid username');

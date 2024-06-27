@@ -275,13 +275,13 @@ color: #858383;
     font-weight: 700;
 }
 .comment-text{
-  font-size:16px;
+  font-size:14px;
   line-height:normal;
   color:#000000;
-  font-weight:600;
 }
 .comment-timestamp{
-  font-size:14px;
+  font-size:12px;
+  color: grey;
 }
 .comment-box{
   max-height:300px;

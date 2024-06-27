@@ -36,14 +36,14 @@ export default function Customer() {
     setCurrentPage(1);
   };
 
-  const baseURL = process.env.REACT_APP_SERVER_URL;
+  const baseURL = process.env.REACT_APP_BASE_URL || 'https://crm.progryss.com';
 
   useEffect(() => {
-    fetch(`https://crm.progryss.com/api/get-enquiries`)
+    fetch(`${baseURL}/api/get-enquiries`)
       .then(response => response.json())
       .then(data => {
         if (data.length > 0) {
-          const keys = Object.keys(data[0]).filter(key => key !== 'id');
+          const keys = Object.keys(data[0]).filter(key => key !== '_id' && key !== '__v');
           const initialColumns = [
             { id: 'serialNumber', title: 'Sr No.' },
             { id: 'selectAll', title: 'Select All' },

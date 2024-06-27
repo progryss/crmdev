@@ -6,7 +6,7 @@ import { useNotification } from "./NotificationContext"; // Adjust the path if n
 
 export default function AddCustomer({ onBack }) {
   
-  const baseURL = process.env.REACT_APP_SERVER_URL;
+  const baseURL = process.env.REACT_APP_BASE_URL || 'https://crm.progryss.com';
 
   const [commentsList, setCommentsList] = useState([]);
   const [comment, setComment] = useState("");
@@ -83,7 +83,7 @@ export default function AddCustomer({ onBack }) {
     
     try {
       // Make the POST request to create an enquiry
-      const response = await axios.post(`https://crm.progryss.com/api/create-enquiry`, customerData);
+      const response = await axios.post(`${baseURL}/api/create-enquiry`, customerData);
       console.log('Enquiry sent successfully:', response.data);
       setCustomerName("");
       setEmail("");
@@ -157,7 +157,7 @@ export default function AddCustomer({ onBack }) {
                         <div className="mb-4">
                           <label htmlFor="phoneNumber" className="form-label label-value">Phone Number</label>
                           <input
-                            type="number"
+                            type="text"
                             className="form-control"
                             id="phoneNumber"
                             value={phoneNumber}
