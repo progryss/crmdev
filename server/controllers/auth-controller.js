@@ -8,7 +8,6 @@ const home = (req, res) => {
 async function createEnquiry(req, res) {
     try {
         const request = await req.body;
-        console.log(request)
         const mappedEnquiry = {
             date: request.date,
             name: request.name,
@@ -34,10 +33,9 @@ async function createEnquiry(req, res) {
 
 const updateEnquiry = async (req, res) => {
     try {
-        const enquiryId = req.params.id; // Get the ID from the request parameters
-        const updateData = req.body; // Get the update data from the request body
+        const enquiryId = req.params.id; 
+        const updateData = req.body;
 
-        // Find the enquiry by ID and update it with new data
         const updatedEnquiry = await CustomerEnquiry.findByIdAndUpdate(
             enquiryId,
             {
@@ -80,7 +78,26 @@ const getEnquiries = async (req, res) => {
     }
 }
 
-module.exports = { home, createEnquiry, getEnquiries, updateEnquiry };
+const deleteEnquiry = async (req, res) => {
+    try {
+        const enquiryId = req.params.id;
+
+        // Find and delete the enquiry by its ID
+        const deletedEnquiry = await CustomerEnquiry.findByIdAndDelete(enquiryId)
+
+        if (!deletedEnquiry) {
+            return res.status(404).send('Enquiry not found');
+        }
+
+        res.status(200).send('Enquiry deleted successfully');
+    } catch (error) {
+        console.error('Error deleting enquiry:', error);
+        res.status(500).send('Error deleting enquiry');
+    }
+}
+
+
+module.exports = { home, createEnquiry, getEnquiries, updateEnquiry, deleteEnquiry };
 
 
 
