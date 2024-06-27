@@ -273,6 +273,7 @@ color: #858383;
   font-size: 16px;
     color: grey;
     font-weight: 700;
+    width:100%;
 }
 .comment-text{
   font-size:14px;

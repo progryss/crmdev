@@ -16,7 +16,7 @@ export default function Customer() {
   const [selectedRows, setSelectedRows] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage] = useState(5);
+  const [rowsPerPage] = useState(20);
   const [columnWidths, setColumnWidths] = useState({});
   const [viewingCustomer, setViewingCustomer] = useState(null);
   const [addingCustomer, setAddingCustomer] = useState(false);
