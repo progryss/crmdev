@@ -169,7 +169,7 @@ function CustomerDetails({ customer, onBack }) {
       <div className="customer-details-grid">
         <div className="card mb-3">
           <div className="card-body">
-            <div className="detail-tab-box d-flex justify-content-between">
+            <div className="detail-tab-box d-flex justify-content-between pb-2">
               <div>
                 <span>Details</span>
               </div>
@@ -190,7 +190,7 @@ function CustomerDetails({ customer, onBack }) {
                 </div>
                 <div className="mb-4">
                   <div className="label-title">Message:</div>
-                  <input className="label-value" onChange={(e) => handleChange('message', e.target.value)} readOnly={isReadOnly} value={flyObject.message || "N/A"} />
+                  <textarea style={{overflowY:'scroll'}} rows="5" className="label-value" onChange={(e) => handleChange('message', e.target.value)} readOnly={isReadOnly} value={flyObject.message || "N/A"} />
                 </div>
               </div>
               <div className="second-column-box">
