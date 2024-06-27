@@ -95,6 +95,10 @@ border-radius:0 0.375rem 0.375rem 0;
 .customer-table-css tbody tr td{
 font-size:14px;
 }
+td > div.message{
+  max-height: 40px;
+  overflow: hidden;
+}
 .customer-table-css thead tr th:first-child,
 .customer-table-css tbody tr td:first-child{
 padding-left:17px;
@@ -271,8 +275,6 @@ color: #858383;
 }
 .label-value{
   font-size: 16px;
-    color: grey;
-    font-weight: 700;
 }
 .comment-text{
   font-size:14px;

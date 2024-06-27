@@ -136,7 +136,7 @@ function CustomerDetails({ customer, onBack }) {
             <div>
               <div className="label-title">Phone Number:</div>
               <div className="label-value">
-                <a href={`https://wa.me/${flyObject.phone}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: '#25d366' }}>
+                <a href={`https://wa.me/${flyObject.phone}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: '#4199FD' }}>
                     {flyObject.phone}
                 </a>
               </div>
@@ -144,7 +144,7 @@ function CustomerDetails({ customer, onBack }) {
             <div>
               <div className="label-title">Email:</div>
               <div className="label-value">
-                <a href={`mailto:${flyObject.email}`} style={{ textDecoration: 'none', color: 'blue' }}>
+                <a href={`mailto:${flyObject.email}`} style={{ textDecoration: 'none', color: '#4199FD' }}>
                   {flyObject.email}
                 </a>
               </div>

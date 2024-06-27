@@ -14,10 +14,10 @@ const customerEnquirySchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true,
-        trim: true,
-        match: [/\S+@\S+\.\S+/, 'is invalid'],  // Email validation regex
-        lowercase: true
+        // required: true,
+        // trim: true,
+        // match: [/\S+@\S+\.\S+/, 'is invalid'],  // Email validation regex
+        // lowercase: true
     },
     country: {
         type: String,

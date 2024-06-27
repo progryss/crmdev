@@ -16,7 +16,7 @@ export default function Customer() {
   const [selectedRows, setSelectedRows] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage] = useState(5);
+  const [rowsPerPage] = useState(20);
   const [columnWidths, setColumnWidths] = useState({});
   const [viewingCustomer, setViewingCustomer] = useState(null);
   const [addingCustomer, setAddingCustomer] = useState(false);
@@ -269,7 +269,7 @@ export default function Customer() {
               </div>
             </div>
           </div>
-          <div className="table-responsive">
+          <div className="table-responsive customerTable">
             <DragDropContext onDragEnd={onDragEnd}>
               <table className="table text-start customer-table-css">
                 <thead ref={tableHeaderRef}>
@@ -355,7 +355,7 @@ export default function Customer() {
                             );
                           } else {
                             return (
-                              <td key={column.id}>
+                              <td key={column.id} >
                                 {row[column.id] && typeof row[column.id] === 'object' ? (
                                   <div>
                                     {column.id === 'address' && (
@@ -375,7 +375,7 @@ export default function Customer() {
                                     )}
                                   </div>
                                 ) : (
-                                  row[column.id]
+                                  <div className={column.id}>{row[column.id]}</div>
                                 )}
                               </td>
                             );

@@ -1,4 +1,28 @@
+.customerTable{
+  height:425px;
+  overflow: scroll;
+}
+/* width */
+.customerTable::-webkit-scrollbar {
+  width: 8px;
+  height:8px;
+}
 
+/* Track */
+.customerTable::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+.customerTable::-webkit-scrollbar-thumb {
+  background:linear-gradient(to right, rgb(234, 231, 231),rgb(190, 189, 189)); 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.customerTable::-webkit-scrollbar-thumb:hover {
+  background: #cbcbcb; 
+}
 
 .App-logo {
   height: 40vmin;
