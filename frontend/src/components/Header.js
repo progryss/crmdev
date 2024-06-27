@@ -12,7 +12,7 @@ const Header = ({ handleLogout }) => {
                     <div className="col-lg-12 my-3">
                         <div className="d-flex align-items-center justify-content-between">
                             <div>
-                                <div className="navbar-brand"><img src='progryss-logo.svg' alt='' width='125' /></div>
+                                <div className="navbar-brand"><Link to='/customer'><img src='progryss-logo.svg' alt='' width='125' /></Link></div>
                             </div>
                             <div className="dropdown">
                                 <span className="user-name dropdown-toggle" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
@@ -29,7 +29,7 @@ const Header = ({ handleLogout }) => {
                     <div className="col">
                         <nav className="navbar navbar-expand-lg p-0 custom-navbar-css gap-3">
                             <div>
-                            <i className="fas fa-th fa-2x"></i>
+                            <Link to='/customer'><i className="fas fa-th fa-2x text-dark"></i></Link>
                             </div>
                             <ul className="navbar-nav mr-auto">
                                 <li className="nav-item">

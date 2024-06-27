@@ -5,6 +5,8 @@ import "react-resizable/css/styles.css";
 import CustomerDetails from "./CustomerDetails";
 import AddCustomer from "./AddCustomer";
 
+
+
 export default function Customer() {
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState([]);
@@ -19,14 +21,14 @@ export default function Customer() {
   const [viewingCustomer, setViewingCustomer] = useState(null);
   const [addingCustomer, setAddingCustomer] = useState(false);
   const tableHeaderRef = useRef(null);
-  
+
   const searchItems = (searchValue) => {
     if (searchValue !== '') {
       const filteredData = data.filter((item) => {
         return (
           item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
           item.phone.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.email.toLowerCase().includes(searchValue.toLowerCase()) 
+          item.email.toLowerCase().includes(searchValue.toLowerCase())
         );
       });
       setFilteredResults(filteredData);
@@ -58,7 +60,8 @@ export default function Customer() {
           } else {
             setColumns(initialColumns);
           }
-          const enrichedData = data.map((item, index) => ({ ...item, originalIndex: index }));
+          const rowData = data.map((item, index) => ({ ...item, originalIndex: index }));
+          const enrichedData = [...rowData].reverse();
           setApiKeys(keys);
           setData(enrichedData);
           setFilteredResults(enrichedData);
@@ -97,7 +100,7 @@ export default function Customer() {
   const handleSelectAll = () => {
     const newSelectAll = !selectAll;
     setSelectAll(newSelectAll);
-    setSelectedRows(newSelectAll ? data.map((row) => row.id) : []);
+    setSelectedRows(newSelectAll ? data.map((row) => row._id) : []);
   };
 
   const handleSelectRow = (id) => {
@@ -106,6 +109,7 @@ export default function Customer() {
       : [...selectedRows, id];
     setSelectedRows(newSelectedRows);
     setSelectAll(newSelectedRows.length === data.length);
+    console.log(id)
   };
 
   const isDate = (value) => {
@@ -137,7 +141,7 @@ export default function Customer() {
       }
       return 0;
     });
-    
+
     setData(sortedData);
     setFilteredResults(sortedData); // Update filteredResults with sorted data
   };
@@ -171,6 +175,7 @@ export default function Customer() {
     localStorage.setItem('columnWidths', JSON.stringify(updatedWidths));
   };
 
+  
   if (viewingCustomer) {
     return <CustomerDetails customer={viewingCustomer} onBack={() => setViewingCustomer(null)} />;
   }
@@ -180,7 +185,9 @@ export default function Customer() {
   }
 
   return (
+
     <div className="container-fluid customer-container">
+     
       <div className="card card-block border-0 customer-table-css-main">
         <div className="card-body p-0">
           <div className="p-3 bg-light add-cutomer-section">
@@ -194,6 +201,10 @@ export default function Customer() {
                     </span>
                   </div>
                   <div>
+                    <button
+                      className="btn btn-primary me-2 add-customer-btn">
+                      <i class="fa fa-trash"></i>
+                    </button>
                     <button
                       className="btn btn-primary ml-3 add-customer-btn"
                       onClick={() => setAddingCustomer(true)}
@@ -337,8 +348,8 @@ export default function Customer() {
                               <td key={column.id}>
                                 <input
                                   type="checkbox"
-                                  checked={selectedRows.includes(row.id)}
-                                  onChange={() => handleSelectRow(row.id)}
+                                  checked={selectedRows.includes(row._id)}
+                                  onChange={() => handleSelectRow(row._id)}
                                 />
                               </td>
                             );
@@ -383,6 +394,7 @@ export default function Customer() {
               </table>
             </DragDropContext>
           </div>
+          {/* pagination */}
           {filteredResults.length > 0 && (
             <nav className="mt-3">
               <ul className="customer-pagination pagination justify-content-center">

@@ -44,9 +44,7 @@ const customerEnquirySchema = new mongoose.Schema({
         match: [/^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/, 'is invalid']  // URL validation regex
     },
     status: {
-        type: String,
-        enum: ['Pending', 'In Progress', 'Resolved'],  // Only these values are allowed
-        default: 'Pending'
+        type: String
     },
     comments: [{
         comment_text: { type: String },

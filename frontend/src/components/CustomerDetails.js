@@ -128,18 +128,26 @@ function CustomerDetails({ customer, onBack }) {
               </div>
             </div>
           </div>
-          <div className="d-flex gap-5 align-items-center p-3">
+          <div className="d-flex gap-5 p-3">
             <div>
               <div className="label-title">Name:</div>
               <div className="label-value">{flyObject.name}</div>
             </div>
             <div>
               <div className="label-title">Phone Number:</div>
-              <div className="label-value">{flyObject.phone}</div>
+              <div className="label-value">
+                <a href={`https://wa.me/${flyObject.phone}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: '#25d366' }}>
+                    {flyObject.phone}
+                </a>
+              </div>
             </div>
             <div>
               <div className="label-title">Email:</div>
-              <div className="label-value">{flyObject.email}</div>
+              <div className="label-value">
+                <a href={`mailto:${flyObject.email}`} style={{ textDecoration: 'none', color: 'blue' }}>
+                  {flyObject.email}
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -149,14 +157,12 @@ function CustomerDetails({ customer, onBack }) {
           <div className="d-flex justify-content-between gap-2">
             <div className="status-card-list">
               <ul>
-                <li>Step 1</li>
-                <li>Step 2</li>
-                <li>Nurturing</li>
-                <li>Unqualified</li>
-                <li>Converted</li>
+                <li>Open</li>
+                <li>Qualified</li>
+                <li>Closed</li>
               </ul>
             </div>
-            <div><button className="btn rounded-pill btn-primary">Mark Status as Complete</button></div>
+            <div><button className="btn rounded-pill btn-primary">Mark status as Completed</button></div>
           </div>
         </div>
       </div>

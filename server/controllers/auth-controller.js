@@ -16,7 +16,7 @@ async function createEnquiry(req, res) {
             phone: request.phone,
             message: request.message,
             page_url: request.page_url,
-            status: 'Pending', // Default status, adjust if necessary
+            status: request.status, // Default status, adjust if necessary
             comments: request.comments.map(comment => ({
                 comment_text: comment.comment_text,
                 comment_date: comment.comment_date
