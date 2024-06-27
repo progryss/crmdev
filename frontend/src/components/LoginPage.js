@@ -41,7 +41,7 @@ export default function LoginPage({ handleLogin }) {
       return;
     }
 
-    const validUsername = 'admin@progryss';
+    const validUsername = 'admin@progryss.com';
     const validPassword = 'Jgw@13579';
 
     if (username !== validUsername) {

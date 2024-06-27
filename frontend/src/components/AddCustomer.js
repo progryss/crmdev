@@ -74,6 +74,7 @@ export default function AddCustomer({ onBack }) {
       phone: phoneNumber,
       email: email,
       message: message,
+      status:'Open',
       page_url:'',
       comments: commentsList.map(comment => ({
         comment_text: comment.text,
@@ -97,7 +98,6 @@ export default function AddCustomer({ onBack }) {
 
     // Simulate success notification
     showNotification('Customer added successfully!', 'success', 'green', 'white');
-    console.log(customerData);
   };
 
   return (
