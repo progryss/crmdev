@@ -96,8 +96,32 @@ const deleteEnquiry = async (req, res) => {
     }
 }
 
+const deleteMultipleEnquiry = async (req, res) => {
+    try {
+        const enquiryIds = req.body.ids;
+        // Validate the input
+        if (!Array.isArray(enquiryIds) || enquiryIds.length === 0) {
+            return res.status(400).send('Invalid or no IDs provided');
+        }
 
-module.exports = { home, createEnquiry, getEnquiries, updateEnquiry, deleteEnquiry };
+        // Perform the deletion
+        const result = await CustomerEnquiry.deleteMany({
+            _id: { $in: enquiryIds }
+        });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).send('No enquiries found to delete');
+        }
+
+        return res.status(200).send(`${result.deletedCount} enquiries deleted successfully`);
+    } catch (error) {
+        console.error('Error deleting enquiries:', error);
+        res.status(500).send('Error deleting enquiries');
+    }
+}
+
+
+module.exports = { home, createEnquiry, getEnquiries, updateEnquiry, deleteEnquiry, deleteMultipleEnquiry };
 
 
 

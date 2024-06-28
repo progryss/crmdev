@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 import { useNotification } from "./NotificationContext"; // Adjust the path if necessary
 
-export default function AddCustomer({ onBack }) {
-  
+export default function AddCustomer() {
+  const navigate = useNavigate();
   const baseURL = process.env.REACT_APP_BASE_URL || 'https://crm.progryss.com';
 
   const [commentsList, setCommentsList] = useState([]);
@@ -60,6 +61,10 @@ export default function AddCustomer({ onBack }) {
     setCommentsList(updatedComments);
   };
 
+  const backToHome = ()=>{
+    navigate('/customer');
+  }
+
   const handleFormSubmit = async (event) => {
     event.preventDefault(); // Prevent default form submission behavior
 
@@ -92,6 +97,8 @@ export default function AddCustomer({ onBack }) {
       setCountry("");
       setCommentsList([]);
       setMessage("");
+
+      navigate('/customer');
     } catch (error) {
       console.error('Error in sending enquiry:', error);
     }
@@ -109,7 +116,7 @@ export default function AddCustomer({ onBack }) {
               <div className="col-lg-12">
                 <div className="d-flex justify-content-between align-items-center">
                   <div className="d-flex align-items-center gap-2">
-                    <span><i className="fa fa-arrow-left" onClick={onBack}></i></span>
+                    <span><i className="fa fa-arrow-left" onClick={backToHome}></i></span>
                     <span><i className="fas fa-user fa-sm"></i></span>
                     <span>
                       <h5 className="mb-0"><strong>Add Customer</strong></h5>
