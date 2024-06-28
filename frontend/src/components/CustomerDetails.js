@@ -20,7 +20,7 @@ function CustomerDetails({ customer, onBack }) {
   const [isReadOnly, setIsReadOnly] = useState(true);
   const { showNotification } = useNotification();
   const [editableValues, setEditableValues] = useState(initialEditValues);
-  const [flyObject,setFlyObject] = useState(initialEditValues);
+  const [flyObject, setFlyObject] = useState(initialEditValues);
 
   const handleCommentChange = (e) => {
     setComment(e.target.value);
@@ -55,7 +55,7 @@ function CustomerDetails({ customer, onBack }) {
     setIsReadOnly(true);
   }
 
-  const deleteQuery = async()=>{
+  const deleteQuery = async () => {
 
     const userResponse = window.confirm("Are you sure you want to delete?");
     if (userResponse) {
@@ -137,7 +137,7 @@ function CustomerDetails({ customer, onBack }) {
               <div className="label-title">Phone Number:</div>
               <div className="label-value">
                 <a href={`https://wa.me/${flyObject.phone}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: '#4199FD' }}>
-                    {flyObject.phone}
+                  {flyObject.phone}
                 </a>
               </div>
             </div>
@@ -162,7 +162,7 @@ function CustomerDetails({ customer, onBack }) {
                 <li>Closed</li>
               </ul>
             </div>
-            <div><button className="btn rounded-pill btn-primary">Mark status as Completed</button></div>
+            <div><button className="btn btn-primary">Mark status as Completed</button></div>
           </div>
         </div>
       </div>
@@ -184,13 +184,29 @@ function CustomerDetails({ customer, onBack }) {
                   <div className="label-title">Name:</div>
                   <input className="label-value" onChange={(e) => handleChange('name', e.target.value)} value={flyObject.name} readOnly={isReadOnly} />
                 </div>
+
+
                 <div className="mb-4">
                   <div className="label-title">Country:</div>
-                  <input className="label-value" onChange={(e) => handleChange('country', e.target.value)} readOnly={isReadOnly} value={flyObject.country} />
+                  <select
+                    className="label-value"
+                    value={flyObject.country}
+                    onChange={(e) => handleChange('country', e.target.value)}
+                    disabled={isReadOnly}
+                  >
+                    <option value="">Select Country</option>
+                    <option value="India">India</option>
+                    <option value="USA">USA</option>
+                    <option value="UK">UK</option>
+                    <option value="Australia">Australia</option>
+                  </select>
                 </div>
+
+
+
                 <div className="mb-4">
                   <div className="label-title">Message:</div>
-                  <textarea style={{overflowY:'scroll'}} rows="5" className="label-value" onChange={(e) => handleChange('message', e.target.value)} readOnly={isReadOnly} value={flyObject.message || "N/A"} />
+                  <textarea style={{ overflowY: 'scroll' }} rows="5" className="label-value" onChange={(e) => handleChange('message', e.target.value)} readOnly={isReadOnly} value={flyObject.message || ""} />
                 </div>
               </div>
               <div className="second-column-box">
@@ -204,7 +220,7 @@ function CustomerDetails({ customer, onBack }) {
                 </div>
                 <div className="mb-4">
                   <div className="label-title">Page URL:</div>
-                  <input className="label-value" onChange={(e) => handleChange('page_url', e.target.value)} readOnly={isReadOnly} value={flyObject.page_url || "N/A"} />
+                  <input className="label-value" onChange={(e) => handleChange('page_url', e.target.value)} readOnly={isReadOnly} value={flyObject.page_url || ""} />
                 </div>
               </div>
             </div>

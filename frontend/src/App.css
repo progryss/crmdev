@@ -1,33 +1,42 @@
-.customerTable{
-  height:425px;
+.customerTable {
+  height: 425px;
   overflow: scroll;
 }
+
 /* width */
 .customerTable::-webkit-scrollbar {
   width: 8px;
-  height:8px;
+  height: 8px;
+}
+.customer-details-grid textarea::-webkit-scrollbar{
+  width: 5px;
 }
 
 /* Track */
+.customer-details-grid textarea::-webkit-scrollbar-track,
 .customerTable::-webkit-scrollbar-track {
-  background: #f1f1f1; 
+  background: #f1f1f1;
 }
- 
+
 /* Handle */
+.customer-details-grid textarea::-webkit-scrollbar-thumb,
 .customerTable::-webkit-scrollbar-thumb {
-  background:linear-gradient(to right, rgb(234, 231, 231),rgb(190, 189, 189)); 
+  background: linear-gradient(to right, rgb(234, 231, 231), rgb(190, 189, 189));
   border-radius: 10px;
 }
 
 /* Handle on hover */
+.customer-details-grid textarea::-webkit-scrollbar-thumb:hover,
 .customerTable::-webkit-scrollbar-thumb:hover {
-  background: #cbcbcb; 
+  background: #cbcbcb;
 }
-.customerTable thead{
+
+.customerTable thead {
   position: sticky;
   top: -1px;
   z-index: 1;
 }
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -39,17 +48,25 @@
   }
 }
 
-.label-value:focus-visible{
+.label-value:focus-visible {
   outline: none;
 }
-.label-value:read-only{
+
+.label-value:read-only {
   border: none;
 }
-
+select.label-value{
+  border: 1px solid #000 !important;
+  height: 28px;
+}
+select.label-value:disabled{
+  border: none !important;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

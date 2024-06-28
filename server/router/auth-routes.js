@@ -8,6 +8,7 @@ router.get('/get-enquiries', allController.getEnquiries);
 router.post('/create-enquiry', allController.createEnquiry);
 router.put('/update-enquiry/:id', allController.updateEnquiry);
 router.delete('/delete-enquiry/:id', allController.deleteEnquiry);
+router.delete('/delete-enquiries', allController.deleteMultipleEnquiry);
 
 
 module.exports = router; 

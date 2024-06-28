@@ -3,7 +3,8 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
 import CustomerDetails from "./CustomerDetails";
-import AddCustomer from "./AddCustomer";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function Customer() {
   const [columns, setColumns] = useState([]);
@@ -17,7 +18,7 @@ export default function Customer() {
   const [rowsPerPage] = useState(20);
   const [columnWidths, setColumnWidths] = useState({});
   const [viewingCustomer, setViewingCustomer] = useState(null);
-  const [addingCustomer, setAddingCustomer] = useState(false);
+  const [trigerUseeffectByDelete, setTrigerUseeffectByDelete] = useState(false);
   const tableHeaderRef = useRef(null);
 
   const searchItems = (searchValue) => {
@@ -39,37 +40,48 @@ export default function Customer() {
   const baseURL = process.env.REACT_APP_BASE_URL || 'https://crm.progryss.com';
 
   useEffect(() => {
-    fetch(`${baseURL}/api/get-enquiries`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.length > 0) {
-          const keys = Object.keys(data[0]).filter(key => key !== '_id' && key !== '__v');
-          const initialColumns = [
-            { id: 'serialNumber', title: 'Sr No.' },
-            { id: 'selectAll', title: 'Select All' },
-            ...keys.map(key => ({
-              id: key,
-              title: key.charAt(0).toUpperCase() + key.slice(1)
-            }))
-          ];
-          const savedColumns = JSON.parse(localStorage.getItem('columns'));
-          if (savedColumns) {
-            setColumns(savedColumns);
-          } else {
-            setColumns(initialColumns);
+    function hit() {
+      fetch(`${baseURL}/api/get-enquiries`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.length > 0) {
+            const keys = Object.keys(data[0]).filter(key => key !== '_id' && key !== '__v');
+            const initialColumns = [
+              { id: 'serialNumber', title: 'Sr No.' },
+              { id: 'selectAll', title: 'Select All' },
+              ...keys.map(key => ({
+                id: key,
+                title: key.charAt(0).toUpperCase() + key.slice(1)
+              }))
+            ];
+            const savedColumns = JSON.parse(localStorage.getItem('columns'));
+            if (savedColumns) {
+              setColumns(savedColumns);
+            } else {
+              setColumns(initialColumns);
+            }
+            const rowData = data.map((item, index) => ({ ...item, originalIndex: index }));
+            
+            const enrichedData = [...rowData].reverse();
+            setApiKeys(keys);
+            setData(enrichedData);
+            setFilteredResults(enrichedData);
+          }else{
+            const rowData = data.map((item, index) => ({ ...item, originalIndex: index }));
+            const enrichedData = [...rowData].reverse();
+            setData(enrichedData);
+            setFilteredResults(enrichedData);
+            setSelectAll(!selectAll);
           }
-          const rowData = data.map((item, index) => ({ ...item, originalIndex: index }));
-          const enrichedData = [...rowData].reverse();
-          setApiKeys(keys);
-          setData(enrichedData);
-          setFilteredResults(enrichedData);
-        }
-      });
-    const savedWidths = JSON.parse(localStorage.getItem('columnWidths'));
-    if (savedWidths) {
-      setColumnWidths(savedWidths);
+        });
+      const savedWidths = JSON.parse(localStorage.getItem('columnWidths'));
+      if (savedWidths) {
+        setColumnWidths(savedWidths);
+      }
     }
-  }, []);
+    hit()
+    console.log('useeffect')
+  }, [viewingCustomer, trigerUseeffectByDelete]);
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
@@ -93,21 +105,6 @@ export default function Customer() {
     }
     setColumns(updatedColumns);
     localStorage.setItem('columns', JSON.stringify(updatedColumns));
-  };
-
-  const handleSelectAll = () => {
-    const newSelectAll = !selectAll;
-    setSelectAll(newSelectAll);
-    setSelectedRows(newSelectAll ? data.map((row) => row._id) : []);
-  };
-
-  const handleSelectRow = (id) => {
-    const newSelectedRows = selectedRows.includes(id)
-      ? selectedRows.filter(rowId => rowId !== id)
-      : [...selectedRows, id];
-    setSelectedRows(newSelectedRows);
-    setSelectAll(newSelectedRows.length === data.length);
-    console.log(id)
   };
 
   const isDate = (value) => {
@@ -147,7 +144,6 @@ export default function Customer() {
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = filteredResults.slice(indexOfFirstRow, indexOfLastRow);
-
   const totalPages = Math.ceil(filteredResults.length / rowsPerPage);
 
   const handlePrevPage = () => {
@@ -173,13 +169,42 @@ export default function Customer() {
     localStorage.setItem('columnWidths', JSON.stringify(updatedWidths));
   };
 
-  
   if (viewingCustomer) {
     return <CustomerDetails customer={viewingCustomer} onBack={() => setViewingCustomer(null)} />;
   }
 
-  if (addingCustomer) {
-    return <AddCustomer onBack={() => setAddingCustomer(false)} />;
+  const handleSelectAll = () => {
+    const newSelectAll = !selectAll;
+    setSelectAll(newSelectAll);
+    setSelectedRows(newSelectAll ? data.map((row) => row._id) : []);
+  };
+
+  const handleSelectRow = (id) => {
+    const newSelectedRows = selectedRows.includes(id)
+      ? selectedRows.filter(rowId => rowId !== id)
+      : [...selectedRows, id];
+    setSelectedRows(newSelectedRows);
+    setSelectAll(newSelectedRows.length === data.length);
+  };
+
+  const deleteRowFromTable = async () => {
+    console.log(selectedRows);
+    const userResponse = window.confirm("Are you sure you want to delete All Enquiries?");
+    if (userResponse) {
+      try {
+        const response = await axios.delete(`${baseURL}/api/delete-enquiries`, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          data: { ids: selectedRows }
+        });
+        console.log(response.data);
+        setTrigerUseeffectByDelete(!trigerUseeffectByDelete)
+      } catch (error) {
+        console.error('Error:', error);
+        console.log(error.response ? error.response.data : 'No response data');
+      }
+    }
   }
 
   return (
@@ -199,14 +224,13 @@ export default function Customer() {
                   </div>
                   <div>
                     <button
-                      className="btn btn-primary me-2 add-customer-btn">
+                      className="btn btn-primary me-2 add-customer-btn" onClick={deleteRowFromTable}>
                       <i className="fa fa-trash"></i>
                     </button>
                     <button
                       className="btn btn-primary ml-3 add-customer-btn"
-                      onClick={() => setAddingCustomer(true)}
                     >
-                      <i className="fas fa-plus"></i> Add Customer
+                      <Link to='/add-enquiry' style={{ textDecoration: 'none' }}><i className="fas fa-plus"></i> Add Customer</Link>
                     </button>
                   </div>
                 </div>

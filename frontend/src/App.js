@@ -6,6 +6,7 @@ import './App.css';
 import Customer from './components/Customer'; // Assuming Customer.js is in ./components/Customer.js
 import LoginPage from './components/LoginPage'; // Assuming LoginPage.js is in ./components/LoginPage.js
 import { NotificationProvider } from './components/NotificationContext'; // Adjusted path
+import AddCustomer from './components/AddCustomer';
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -59,6 +60,7 @@ function AppContent({ isLoggedIn, handleLogin, handleLogout }) {
                     <Route path="/" element={<Navigate to={isLoggedIn ? "/customer" : "/login"} />} />
                     <Route path="/login" element={isLoggedIn ? <Navigate to="/customer" /> : <LoginPage handleLogin={handleLogin} />} />
                     <Route path="/customer" element={isLoggedIn ? <Customer /> : <Navigate to="/login" />} />
+                    <Route path="/add-enquiry" element={<AddCustomer />} />
                     <Route path="*" element={<Navigate to={isLoggedIn ? "/customer" : "/login"} />} />
                 </Routes>
             </main>
