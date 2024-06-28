@@ -4,4 +4,4 @@ server/node_modules/
 frontend/.env
 server/.env
 frontend/build/
-
+ecosystem.config.js
