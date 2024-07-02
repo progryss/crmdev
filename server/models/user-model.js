@@ -40,11 +40,23 @@ const customerEnquirySchema = new mongoose.Schema({
     page_url: {
         type: String,
         // required: true,
-        trim: true,
-        match: [/^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/, 'is invalid']  // URL validation regex
+        // trim: true,
+        // match: [/^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/, 'is invalid']  
     },
     status: {
         type: String
+    },
+    service: {
+        type: String,
+        default:""
+    },
+    budget: {
+        type: String,
+        default:""
+    },
+    startFrom: {
+        type: String,
+        default:""
     },
     comments: [{
         comment_text: { type: String },

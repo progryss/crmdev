@@ -13,7 +13,10 @@ function CustomerDetails({ customer, onBack }) {
     phone: customer.phone,
     message: customer.message,
     page_url: customer.page_url,
-    comments: customer.comments
+    comments: customer.comments,
+    service: customer.service,
+    budget: customer.budget,
+    startFrom: customer.startFrom
   };
 
   const [comment, setComment] = useState("");
@@ -185,7 +188,6 @@ function CustomerDetails({ customer, onBack }) {
                   <input className="label-value" onChange={(e) => handleChange('name', e.target.value)} value={flyObject.name} readOnly={isReadOnly} />
                 </div>
 
-
                 <div className="mb-4">
                   <div className="label-title">Country:</div>
                   <select
@@ -202,12 +204,44 @@ function CustomerDetails({ customer, onBack }) {
                   </select>
                 </div>
 
-
+                <div className="mb-4">
+                  <div className="label-title">Service:</div>
+                  <select
+                    className="label-value"
+                    value={flyObject.service}
+                    onChange={(e) => handleChange('service', e.target.value)}
+                    disabled={isReadOnly}
+                  >
+                    <option value="">What are you looking for</option>
+                    <option value="Consulting">Consulting</option>
+                    <option value="Design">Design</option>
+                    <option value="CMS &amp; Platform">CMS &amp; Platform</option>
+                    <option value="Web Frameworks">Web Frameworks</option>
+                    <option value="Infra &amp; Product Lifecycle">Infra &amp; Product Lifecycle</option>
+                    <option value="Next Generation Technology">Next Generation Technology</option>
+                    <option value="Mobility">Mobility</option>
+                    <option value="Core Engineering">Core Engineering</option>
+                    <option value="Retail &amp; Ecommerce">Retail &amp; Ecommerce</option>
+                    <option value="Mentainance &amp; Support">Mentainance &amp; Support</option>
+                  </select>
+                </div>
 
                 <div className="mb-4">
-                  <div className="label-title">Message:</div>
-                  <textarea style={{ overflowY: 'scroll' }} rows="5" className="label-value" onChange={(e) => handleChange('message', e.target.value)} readOnly={isReadOnly} value={flyObject.message || ""} />
+                  <div className="label-title">When to start:</div>
+                  <select
+                    className="label-value"
+                    value={flyObject.startFrom}
+                    onChange={(e) => handleChange('startFrom', e.target.value)}
+                    disabled={isReadOnly}
+                  >
+                    <option value="">When to Start</option>
+                    <option value="Right Now">Right Now</option>
+                    <option value="In Few Weeks">In Few Weeks</option>
+                    <option value="In Few Months">In Few Months</option>
+                    <option value="Not Sure">Not Sure</option>
+                  </select>
                 </div>
+
               </div>
               <div className="second-column-box">
                 <div className="mb-4">
@@ -222,7 +256,29 @@ function CustomerDetails({ customer, onBack }) {
                   <div className="label-title">Page URL:</div>
                   <input className="label-value" onChange={(e) => handleChange('page_url', e.target.value)} readOnly={isReadOnly} value={flyObject.page_url || ""} />
                 </div>
+                <div className="mb-4">
+                  <div className="label-title">Project Budget:</div>
+                  <select
+                    className="label-value"
+                    value={flyObject.budget}
+                    onChange={(e) => handleChange('budget', e.target.value)}
+                    disabled={isReadOnly}
+                  >
+                    <option value="">Project Budget</option>
+                    <option value="2k - 5k USD">2k - 5k USD</option>
+                    <option value="5k - 10k USD">5k - 10k USD</option>
+                    <option value="10k - 20k USD">10k - 20k USD</option>
+                    <option value="20k - 50k USD">20k - 50k USD</option>
+                    <option value="50k USD Or Above">50k USD Or Above</option>
+                    <option value="Not Sure">Not Sure</option>
+                  </select>
+                </div>
               </div>
+
+            </div>
+            <div className="mb-4">
+              <div className="label-title">Message:</div>
+              <textarea style={{ overflowY: 'scroll' }} rows="5" className="label-value" onChange={(e) => handleChange('message', e.target.value)} readOnly={isReadOnly} value={flyObject.message || ""} />
             </div>
           </div>
         </div>

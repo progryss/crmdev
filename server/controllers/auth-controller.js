@@ -16,7 +16,10 @@ async function createEnquiry(req, res) {
             phone: request.phone,
             message: request.message,
             page_url: request.page_url,
-            status: request.status, // Default status, adjust if necessary
+            status: request.status,
+            service:request.service,
+            budget: request.budget,
+            startFrom: request.startFrom,
             comments: request.comments.map(comment => ({
                 comment_text: comment.comment_text,
                 comment_date: comment.comment_date
@@ -48,6 +51,9 @@ const updateEnquiry = async (req, res) => {
                     message: updateData.message,
                     page_url: updateData.page_url,
                     status: updateData.status,
+                    service:updateData.service,
+                    budget:updateData.budget,
+                    startFrom:updateData.startFrom,
                     comments: updateData.comments.map(comment => ({
                         comment_text: comment.comment_text,
                         comment_date: comment.comment_date

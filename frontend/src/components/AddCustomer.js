@@ -18,6 +18,9 @@ export default function AddCustomer() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [service, setService] = useState("");
+  const [budget, setBudget] = useState("");
+  const [startFrom, setStartFrom] = useState("");
 
   const { showNotification } = useNotification();
 
@@ -61,7 +64,7 @@ export default function AddCustomer() {
     setCommentsList(updatedComments);
   };
 
-  const backToHome = ()=>{
+  const backToHome = () => {
     navigate('/customer');
   }
 
@@ -79,14 +82,17 @@ export default function AddCustomer() {
       phone: phoneNumber,
       email: email,
       message: message,
-      status:'Open',
-      page_url:'',
+      status: 'Open',
+      service: service,
+      budget: budget,
+      startFrom: startFrom,
+      page_url: '',
       comments: commentsList.map(comment => ({
         comment_text: comment.text,
         comment_date: comment.timestamp
       }))
     };
-    
+
     try {
       // Make the POST request to create an enquiry
       const response = await axios.post(`${baseURL}/api/create-enquiry`, customerData);
@@ -97,6 +103,9 @@ export default function AddCustomer() {
       setCountry("");
       setCommentsList([]);
       setMessage("");
+      setService("");
+      setBudget("");
+      setStartFrom("");
 
       navigate('/customer');
     } catch (error) {
@@ -159,6 +168,44 @@ export default function AddCustomer() {
                             <option value="Australia">Australia</option>
                           </select>
                         </div>
+                        <div className="mb-4">
+                          <label htmlFor="service" className="form-label label-value">What are you looking for</label>
+                          <select
+                            className="form-control"
+                            id="service"
+                            value={service}
+                            onChange={(event) => setService(event.target.value)}
+                          >
+                            <option value="">What are you looking for</option>
+                            <option value="Consulting">Consulting</option>
+                            <option value="Design">Design</option>
+                            <option value="CMS &amp; Platform">CMS &amp; Platform</option>
+                            <option value="Web Frameworks">Web Frameworks</option>
+                            <option value="Infra &amp; Product Lifecycle">Infra &amp; Product Lifecycle</option>
+                            <option value="Next Generation Technology">Next Generation Technology</option>
+                            <option value="Mobility">Mobility</option>
+                            <option value="Core Engineering">Core Engineering</option>
+                            <option value="Retail &amp; Ecommerce">Retail &amp; Ecommerce</option>
+                            <option value="Mentainance &amp; Support">Mentainance &amp; Support</option>
+                          </select>
+                        </div>
+
+                        <div className="mb-4">
+                          <label htmlFor="startFrom" className="form-label label-value">When to start</label>
+                          <select
+                            className="form-control"
+                            id="startFrom"
+                            value={startFrom}
+                            onChange={(event) => setStartFrom(event.target.value)}
+                          >
+                            <option value="">When to Start</option>
+                            <option value="Right Now">Right Now</option>
+                            <option value="In Few Weeks">In Few Weeks</option>
+                            <option value="In Few Months">In Few Months</option>
+                            <option value="Not Sure">Not Sure</option>
+                          </select>
+                        </div>
+
                       </div>
                       <div className="form-grid-column-two">
                         <div className="mb-4">
@@ -182,6 +229,23 @@ export default function AddCustomer() {
                             onChange={(event) => setEmail(event.target.value)}
                             placeholder="Enter email address"
                           />
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor="budget" className="form-label label-value">Project Budget</label>
+                          <select
+                            className="form-control"
+                            id="budget"
+                            value={budget}
+                            onChange={(event) => setBudget(event.target.value)}
+                          >
+                            <option value="">Project Budget</option>
+                            <option value="2k - 5k USD">2k - 5k USD</option>
+                            <option value="5k - 10k USD">5k - 10k USD</option>
+                            <option value="10k - 20k USD">10k - 20k USD</option>
+                            <option value="20k - 50k USD">20k - 50k USD</option>
+                            <option value="50k USD Or Above">50k USD Or Above</option>
+                            <option value="Not Sure">Not Sure</option>
+                          </select>
                         </div>
                       </div>
                     </div>
@@ -283,7 +347,7 @@ export default function AddCustomer() {
             </div>
           </form>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
