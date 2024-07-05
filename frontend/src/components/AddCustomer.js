@@ -21,6 +21,8 @@ export default function AddCustomer() {
   const [service, setService] = useState("");
   const [budget, setBudget] = useState("");
   const [startFrom, setStartFrom] = useState("");
+  const [website_url, setWebsite_url] = useState("");
+  const [seoActivity, setSeoActivity] = useState("");
 
   const { showNotification } = useNotification();
 
@@ -87,6 +89,8 @@ export default function AddCustomer() {
       budget: budget,
       startFrom: startFrom,
       page_url: '',
+      website_url: website_url,
+      seoActivity: seoActivity,
       comments: commentsList.map(comment => ({
         comment_text: comment.text,
         comment_date: comment.timestamp
@@ -106,6 +110,8 @@ export default function AddCustomer() {
       setService("");
       setBudget("");
       setStartFrom("");
+      setWebsite_url("");
+      setSeoActivity("");
 
       navigate('/customer');
     } catch (error) {
@@ -206,6 +212,21 @@ export default function AddCustomer() {
                           </select>
                         </div>
 
+                        <div className="mb-4">
+                          <label htmlFor="seoActivity" className="form-label label-value">Seo Activity</label>
+                          <select
+                            className="form-control"
+                            id="seoActivity"
+                            value={seoActivity}
+                            onChange={(event) => setSeoActivity(event.target.value)}
+                          >
+                            <option value="">How are your SEO activities managed now?</option>
+                            <option value="Right Now">Via an Agency</option>
+                            <option value="In Few Weeks">In-house Team</option>
+                            <option value="In Few Months">SEO activities not initiated yet</option>
+                          </select>
+                        </div>
+
                       </div>
                       <div className="form-grid-column-two">
                         <div className="mb-4">
@@ -228,6 +249,17 @@ export default function AddCustomer() {
                             value={email}
                             onChange={(event) => setEmail(event.target.value)}
                             placeholder="Enter email address"
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor="website_url" className="form-label label-value">Website Url</label>
+                          <input
+                            type="website_url"
+                            className="form-control"
+                            id="website_url"
+                            value={website_url}
+                            onChange={(event) => setWebsite_url(event.target.value)}
+                            placeholder="Add website url"
                           />
                         </div>
                         <div className="mb-4">

@@ -16,7 +16,9 @@ function CustomerDetails({ customer, onBack }) {
     comments: customer.comments,
     service: customer.service,
     budget: customer.budget,
-    startFrom: customer.startFrom
+    startFrom: customer.startFrom,
+    website_url: customer.website_url,
+    seoActivity: customer.seoActivity
   };
 
   const [comment, setComment] = useState("");
@@ -242,6 +244,24 @@ function CustomerDetails({ customer, onBack }) {
                   </select>
                 </div>
 
+
+                <div className="mb-4">
+                  <div className="label-title">Seo Activity:</div>
+                  <select
+                    className="label-value"
+                    value={flyObject.seoActivity}
+                    onChange={(e) => handleChange('seoActivity', e.target.value)}
+                    disabled={isReadOnly}
+                  >
+                    <option value="">How are your SEO activities managed now?</option>
+                    <option value="Right Now">Via an Agency</option>
+                    <option value="In Few Weeks">In-house Team</option>
+                    <option value="In Few Months">SEO activities not initiated yet</option>
+                  </select>
+                </div>
+
+
+
               </div>
               <div className="second-column-box">
                 <div className="mb-4">
@@ -253,8 +273,12 @@ function CustomerDetails({ customer, onBack }) {
                   <input className="label-value" onChange={(e) => handleChange('email', e.target.value)} readOnly={isReadOnly} value={flyObject.email} />
                 </div>
                 <div className="mb-4">
+                  <div className="label-title">Website Url:</div>
+                  <input className="label-value" onChange={(e) => handleChange('website_url', e.target.value)} readOnly={isReadOnly} value={flyObject.website_url} />
+                </div>
+                <div className="mb-4">
                   <div className="label-title">Page URL:</div>
-                  <input className="label-value" onChange={(e) => handleChange('page_url', e.target.value)} readOnly={isReadOnly} value={flyObject.page_url || ""} />
+                  <textarea className="label-value" rows="3" onChange={(e) => handleChange('page_url', e.target.value)} readOnly={isReadOnly} value={flyObject.page_url} />
                 </div>
                 <div className="mb-4">
                   <div className="label-title">Project Budget:</div>

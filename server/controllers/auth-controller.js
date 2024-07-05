@@ -20,6 +20,8 @@ async function createEnquiry(req, res) {
             service:request.service,
             budget: request.budget,
             startFrom: request.startFrom,
+            website_url:request.website_url,
+            seoActivity:request.seoActivity,
             comments: request.comments.map(comment => ({
                 comment_text: comment.comment_text,
                 comment_date: comment.comment_date
@@ -38,7 +40,6 @@ const updateEnquiry = async (req, res) => {
     try {
         const enquiryId = req.params.id; 
         const updateData = req.body;
-
         const updatedEnquiry = await CustomerEnquiry.findByIdAndUpdate(
             enquiryId,
             {
@@ -54,6 +55,8 @@ const updateEnquiry = async (req, res) => {
                     service:updateData.service,
                     budget:updateData.budget,
                     startFrom:updateData.startFrom,
+                    website_url:updateData.website_url,
+                    seoActivity:updateData.seoActivity,
                     comments: updateData.comments.map(comment => ({
                         comment_text: comment.comment_text,
                         comment_date: comment.comment_date

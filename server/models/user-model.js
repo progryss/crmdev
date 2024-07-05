@@ -58,6 +58,14 @@ const customerEnquirySchema = new mongoose.Schema({
         type: String,
         default:""
     },
+    website_url: {
+        type: String,
+        default:""
+    },
+    seoActivity: {
+        type: String,
+        default:""
+    },
     comments: [{
         comment_text: { type: String },
         comment_date: { type: String }
