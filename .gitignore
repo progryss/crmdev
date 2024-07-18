@@ -10,5 +10,6 @@
 # Optional: Ignore build output in frontend
 /frontend/build/
 
+/server/uploads/
 ecosystem.config.js
 

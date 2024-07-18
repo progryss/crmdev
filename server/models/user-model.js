@@ -3,13 +3,13 @@ const mongoose = require('mongoose');
 // define schema for enquiry data
 const customerEnquirySchema = new mongoose.Schema({
     date: {
-        type:String,
+        type: String,
         // default: Date.now,  // Automatically set to current date
         // required: true
     },
     name: {
         type: String,
-        required: true, 
+        required: true,
         trim: true       // Remove whitespace from both ends
     },
     email: {
@@ -48,30 +48,114 @@ const customerEnquirySchema = new mongoose.Schema({
     },
     service: {
         type: String,
-        default:""
+        default: ""
     },
     budget: {
         type: String,
-        default:""
+        default: ""
     },
     startFrom: {
         type: String,
-        default:""
+        default: ""
     },
     website_url: {
         type: String,
-        default:""
+        default: ""
     },
     seoActivity: {
         type: String,
-        default:""
+        default: ""
     },
     comments: [{
         comment_text: { type: String },
         comment_date: { type: String }
-      }]
+    }]
 });
 
-const CustomerEnquiry = mongoose.model('Enquiry', customerEnquirySchema);
+const companyDatabaseSchema = new mongoose.Schema({
+    date: {
+        type: String
+    },
+    companyName: {
+        type: String,
+        default: ""
+    },
+    websiteUrl: {
+        type: String,
+        default: ""
+    },
+    profileLink: {
+        type: String,
+        default: ""
+    },
+    rating: {
+        type: String,
+        default: ""
+    },
+    reviews: {
+        type: String,
+        default: ""
+    },
+    minimumProjects: {
+        type: String,
+        default: ""
+    },
+    hourlyRate: {
+        type: String,
+        default: ""
+    },
+    size: {
+        type: String,
+        default: ""
+    },
+    city: {
+        type: String,
+        default: ""
+    },
+    country: {
+        type: String,
+        default: ""
+    },
+    servicesProvided: {
+        type: String,
+        default: ""
+    },
+    name: {
+        type: String,
+        default: ""
+    },
+    linkedinUrl: {
+        type: String,
+        default: ""
+    },
+    bio: {
+        type: String,
+        default: ""
+    },
+    email: {
+        type: String,
+        default: ""
+    },
+    phone: {
+        type: String,
+        default: ""
+    },
+    status: {
+        type: String
+    },
+    comments: [{
+        comment_text: {
+            type: String,
+            default: ""
+        },
+        comment_date: {
+            type: String,
+            default: ""
+        }
+    }]
+})
 
-module.exports = {CustomerEnquiry};
+const CustomerEnquiry = mongoose.model('Enquiry', customerEnquirySchema);
+const CompanyDatabase = mongoose.model('Company', companyDatabaseSchema)
+
+module.exports = { CustomerEnquiry, CompanyDatabase };

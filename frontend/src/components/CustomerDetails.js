@@ -33,7 +33,7 @@ function CustomerDetails({ customer, onBack }) {
 
   const handleCommentDelete = (index) => {
     editableValues.comments.splice(index, 1);
-    console.log(editableValues.comments)
+    // console.log(editableValues.comments)
     setEditableValues((object) => ({
       ...object,
       comments: editableValues.comments
@@ -41,12 +41,12 @@ function CustomerDetails({ customer, onBack }) {
   };
 
   const editEnquiry = () => {
-    console.log('edit start');
+    // console.log('edit start');
     setIsReadOnly(false);
   }
 
   const saveEnquiry = async () => {
-    console.log('enquiry save');
+    // console.log('enquiry save');
     setEditableValues(flyObject)
     setIsReadOnly(true);
   }
@@ -66,7 +66,7 @@ function CustomerDetails({ customer, onBack }) {
     if (userResponse) {
       try {
         const response = await axios.delete(`${baseURL}/api/delete-enquiry/${customer._id}`);
-        console.log(response)
+        console.log(response.data)
       } catch (error) {
         console.log(error)
       }
@@ -76,12 +76,12 @@ function CustomerDetails({ customer, onBack }) {
   }
 
   useEffect(() => {
-    console.log('useeffect')
+    // console.log('useeffect')
     hit()
   }, [editableValues])
 
   async function hit() {
-    console.log(editableValues)
+    // console.log(editableValues)
     try {
       const config = {
         headers: {
@@ -89,7 +89,7 @@ function CustomerDetails({ customer, onBack }) {
         }
       };
       const response = await axios.put(`${baseURL}/api/update-enquiry/${customer._id}`, editableValues, config);
-      console.log(response);
+      console.log(response.data);
     } catch (error) {
       console.log('Error sending PUT request', error);
     }
