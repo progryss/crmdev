@@ -2,13 +2,17 @@ import React, { useState, useEffect, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
-import CustomerDetails from "./CustomerDetails";
+import CompanyDetails from "./companyDetails";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-export default function Customer() {
+export default function Database() {
+  const [companyData, setCompanyData] = useState(null);
+
+
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState([]);
+  const [ep, setEp] = useState(true);
   const [filteredResults, setFilteredResults] = useState([]);
   const [apiKeys, setApiKeys] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -17,7 +21,7 @@ export default function Customer() {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage] = useState(20);
   const [columnWidths, setColumnWidths] = useState({});
-  const [viewingCustomer, setViewingCustomer] = useState(null);
+  const [viewingCompany, setViewingCompany] = useState(null);
   const [trigerUseeffectByDelete, setTrigerUseeffectByDelete] = useState(false);
   const tableHeaderRef = useRef(null);
 
@@ -25,7 +29,7 @@ export default function Customer() {
     if (searchValue !== '') {
       const filteredData = data.filter((item) => {
         return (
-          item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.companyName.toLowerCase().includes(searchValue.toLowerCase()) ||
           item.phone.toLowerCase().includes(searchValue.toLowerCase()) ||
           item.email.toLowerCase().includes(searchValue.toLowerCase())
         );
@@ -39,9 +43,11 @@ export default function Customer() {
 
   const baseURL = process.env.REACT_APP_BASE_URL || 'https://crm.progryss.com';
 
+
+
   useEffect(() => {
     function hit() {
-      fetch(`${baseURL}/api/get-enquiries`)
+      fetch(`${baseURL}/api/get-company_data`)
         .then(response => response.json())
         .then(data => {
           if (data.length > 0) {
@@ -54,19 +60,19 @@ export default function Customer() {
                 title: key.charAt(0).toUpperCase() + key.slice(1)
               }))
             ];
-            const savedColumns = JSON.parse(localStorage.getItem('columns'));
+            const savedColumns = JSON.parse(localStorage.getItem('columns2'));
             if (savedColumns) {
               setColumns(savedColumns);
             } else {
               setColumns(initialColumns);
             }
             const rowData = data.map((item, index) => ({ ...item, originalIndex: index }));
-            
+
             const enrichedData = [...rowData].reverse();
             setApiKeys(keys);
             setData(enrichedData);
             setFilteredResults(enrichedData);
-          }else{
+          } else {
             const rowData = data.map((item, index) => ({ ...item, originalIndex: index }));
             const enrichedData = [...rowData].reverse();
             setData(enrichedData);
@@ -74,14 +80,14 @@ export default function Customer() {
             setSelectAll(!selectAll);
           }
         });
-      const savedWidths = JSON.parse(localStorage.getItem('columnWidths'));
+      const savedWidths = JSON.parse(localStorage.getItem('columnWidths2'));
       if (savedWidths) {
         setColumnWidths(savedWidths);
       }
     }
     hit()
     // console.log('useeffect')
-  }, [viewingCustomer, trigerUseeffectByDelete]);
+  }, [viewingCompany, trigerUseeffectByDelete,ep]);
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
@@ -91,7 +97,7 @@ export default function Customer() {
       updatedColumns.splice(result.destination.index, 0, reorderedColumn);
     }
     setColumns(updatedColumns);
-    localStorage.setItem('columns', JSON.stringify(updatedColumns));
+    localStorage.setItem('columns2', JSON.stringify(updatedColumns));
   };
 
   const handleToggleColumn = (key) => {
@@ -104,7 +110,7 @@ export default function Customer() {
       updatedColumns = [...columns, newColumn];
     }
     setColumns(updatedColumns);
-    localStorage.setItem('columns', JSON.stringify(updatedColumns));
+    localStorage.setItem('columns2', JSON.stringify(updatedColumns));
   };
 
   const isDate = (value) => {
@@ -166,11 +172,11 @@ export default function Customer() {
       [columnId]: width
     };
     setColumnWidths(updatedWidths);
-    localStorage.setItem('columnWidths', JSON.stringify(updatedWidths));
+    localStorage.setItem('columnWidths2', JSON.stringify(updatedWidths));
   };
 
-  if (viewingCustomer) {
-    return <CustomerDetails customer={viewingCustomer} onBack={() => setViewingCustomer(null)} />;
+  if (viewingCompany) {
+    return <CompanyDetails company={viewingCompany} onBack={() => setViewingCompany(null)} />;
   }
 
   const handleSelectAll = () => {
@@ -193,7 +199,7 @@ export default function Customer() {
     const userResponse = window.confirm(userResponseText);
     if (userResponse) {
       try {
-        const response = await axios.delete(`${baseURL}/api/delete-enquiries`, {
+        const response = await axios.delete(`${baseURL}/api/delete-companies`, {
           headers: {
             'Content-Type': 'application/json'
           },
@@ -208,6 +214,30 @@ export default function Customer() {
     setSelectedRows([])
   }
 
+ 
+
+  const uploadCompanyData = async(e) => {
+    e.preventDefault();
+    if (!companyData) {
+      alert('Please choose a file to upload !')
+      return;
+    }
+  
+    try {
+      const formData = new FormData();
+      formData.append('jsonFile', companyData);
+
+      const response = await axios.post(`${baseURL}/api/upload-company_data`,formData);
+      console.log(response.data)
+      setEp(!ep)
+    } catch (error) {
+      console.log('error in sending file',error)
+    }
+  }
+  const onUpload = (e)=>{
+    setCompanyData(e.target.files[0])
+  }
+
   return (
 
     <div className="container-fluid customer-container">
@@ -220,10 +250,17 @@ export default function Customer() {
                   <div className="d-flex align-items-center gap-2">
                     <span><i className="fas fa-user fa-sm"></i></span>
                     <span>
-                      <h5 className="mb-0"><strong>Customer</strong></h5>
+                      <h5 className="mb-0"><strong>Database</strong></h5>
                     </span>
                   </div>
-                  <div>
+
+                  <div style={{display:"flex"}}>
+                    <div style={{maxWidth:"400px"}} className="me-2">
+                      <form onSubmit={uploadCompanyData} style={{display:"flex",gap:"8px"}}>
+                        <input type="file" className="form-control bg-custom" onChange={onUpload} accept=".json"/>
+                        <button type="submit" className="btn btn-primary add-customer-btn" style={{minWidth:"115px"}}>Upload JSON</button>
+                      </form>
+                    </div>
                     <button
                       className="btn btn-primary me-2 add-customer-btn" onClick={deleteRowFromTable}>
                       <i className="fa fa-trash"></i>
@@ -231,7 +268,7 @@ export default function Customer() {
                     <button
                       className="btn btn-primary ml-3 add-customer-btn"
                     >
-                      <Link to='/add-enquiry' style={{ textDecoration: 'none' }}><i className="fas fa-plus"></i> Add Customer</Link>
+                      <Link to='/add-company' style={{ textDecoration: 'none' }}><i className="fas fa-plus"></i> Add Company</Link>
                     </button>
                   </div>
                 </div>
@@ -358,7 +395,7 @@ export default function Customer() {
                         const target = e.target;
                         const isCheckbox = target.tagName.toLowerCase() === 'input' && target.type === 'checkbox';
                         if (!isCheckbox) {
-                          setViewingCustomer(row);
+                          setViewingCompany(row);
                         }
                       }} style={{ cursor: "pointer" }}>
                         {columns.map((column) => {
@@ -398,7 +435,7 @@ export default function Customer() {
                                     )}
                                   </div>
                                 ) : (
-                                  <span className={column.id}>{row[column.id]}</span>
+                                  <div className={column.id}>{row[column.id]}</div>
                                 )}
                               </td>
                             );

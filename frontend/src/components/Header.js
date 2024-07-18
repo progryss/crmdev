@@ -28,12 +28,13 @@ const Header = ({ handleLogout }) => {
                 <div className="row">
                     <div className="col">
                         <nav className="navbar navbar-expand-lg p-0 custom-navbar-css gap-3">
-                            <div>
-                            <Link to='/customer'><i className="fas fa-th fa-2x text-dark"></i></Link>
-                            </div>
+                            <div><Link to='/customer'><i className="fas fa-th fa-2x text-dark"></i></Link></div>
                             <ul className="navbar-nav mr-auto">
                                 <li className="nav-item">
-                                    <NavLink className={`nav-link ${location.pathname === '/' ? 'active' : ''}`} to="/customer">Customer</NavLink>
+                                    <NavLink className={`nav-link`} to="/customer">Customer</NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className={`nav-link`} to="/database">Database</NavLink>
                                 </li>
                             </ul>
                         </nav>

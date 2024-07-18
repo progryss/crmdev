@@ -100,7 +100,7 @@ export default function AddCustomer() {
     try {
       // Make the POST request to create an enquiry
       const response = await axios.post(`${baseURL}/api/create-enquiry`, customerData);
-      console.log('Enquiry sent successfully:', response.data);
+      console.log(response.data);
       setCustomerName("");
       setEmail("");
       setPhoneNumber("");

@@ -95,7 +95,9 @@ border-radius:0 0.375rem 0.375rem 0;
 .customer-table-css tbody tr td{
 font-size:14px;
 }
-td > div.message{
+td > div.message,
+td > div.bio,
+td > div.servicesProvided{
   max-height: 40px;
   overflow: hidden;
 }
