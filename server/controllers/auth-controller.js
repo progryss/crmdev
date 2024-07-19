@@ -1,7 +1,6 @@
 const { CustomerEnquiry, CompanyDatabase } = require('../models/user-model');
 require("dotenv").config();
-const fs = require('fs');
-const csv = require('fast-csv');
+const fs = require('fs').promises;
 const path = require('path');
 
 const home = (req, res) => {
@@ -267,15 +266,18 @@ const uploadCompanyData = async (req, res) => {
     if (!req.file) {
         return res.status(404).send('No file uploaded');
     }
+    const filePath = path.join(__dirname, '../uploads', req.file.filename);
 
     try {
-        const filePath = path.join(__dirname, '../uploads', req.file.filename);
-        const rawFileData = fs.readFileSync(filePath, 'utf8');
+        // Asynchronously read file content
+        const rawFileData = await fs.readFile(filePath, 'utf8');
         const companyData = JSON.parse(rawFileData);
+
         const date = new Date();
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
         const formatted = date.toLocaleDateString('en-US', options);
 
+        // Transform data for database insertion
         const transformedData = companyData.map(item => ({
             date: formatted,
             companyName: item.name,
@@ -303,8 +305,11 @@ const uploadCompanyData = async (req, res) => {
         res.status(200).send('File uploaded and processed successfully.');
 
     } catch (error) {
-        console.log('error in uploading company data', error);
-        res.status(500).send('Error in uploading file');
+        console.error('Error in uploading company data:', error);
+        res.status(500).send('Error in processing file: ' + error.message);
+    } finally {
+        // Cleanup: delete the uploaded file after processing
+        // await fs.unlink(filePath);
     }
 };
 
