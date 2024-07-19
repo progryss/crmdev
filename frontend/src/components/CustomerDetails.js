@@ -331,7 +331,7 @@ function CustomerDetails({ customer, onBack }) {
                       <div className="card-body pb-1">
 
                         <div>
-                          <div className="comment-text mb-2">{comment.comment_text}</div>
+                          <div className="comment-text mb-2"><pre style={{fontFamily:"inherit"}}>{comment.comment_text}</pre></div>
                           <hr className="m-0 mt-3 mb-2" />
                           <div className="comment-timestamp d-flex justify-content-between align-items-baseline">
                             <div>

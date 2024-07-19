@@ -410,7 +410,7 @@ export default function AddCompany() {
                                                             ) : (
                                                                 <>
                                                                     <div>
-                                                                        <div className="comment-text mb-2">{comment.text}</div>
+                                                                        <div className="comment-text mb-2"><pre style={{fontFamily:"inherit"}}>{comment.text}</pre></div>
                                                                         <div className="comment-timestamp">{comment.timestamp}</div>
                                                                     </div>
                                                                     <div>

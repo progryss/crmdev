@@ -31,7 +31,8 @@ export default function Database() {
         return (
           item.companyName.toLowerCase().includes(searchValue.toLowerCase()) ||
           item.phone.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.email.toLowerCase().includes(searchValue.toLowerCase())
+          item.email.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.name.toLowerCase().includes(searchValue.toLowerCase())
         );
       });
       setFilteredResults(filteredData);
@@ -354,8 +355,8 @@ export default function Database() {
                                   width={columnWidths[column.id] || 100}
                                   height={23}
                                   axis="x"
-                                  minConstraints={[50, 30]}
-                                  maxConstraints={[200, 23]}
+                                  minConstraints={[10, 30]}
+                                  maxConstraints={[2000, 23]}
                                   resizeHandles={["e"]}
                                   className="resize-handle"
                                   onResizeStop={(e, data) => handleResize(column.id, data.size.width)}

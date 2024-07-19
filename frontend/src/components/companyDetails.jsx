@@ -23,7 +23,8 @@ function CompanyDetails({ company, onBack }) {
         bio: company.bio,
         email: company.email,
         phone: company.phone,
-        comments: company.comments
+        comments: company.comments,
+        status : company.status
     };
 
     const [comment, setComment] = useState("");
@@ -59,6 +60,11 @@ function CompanyDetails({ company, onBack }) {
     const handleChange = (field, value) => {
         setFlyObject(prev => ({ ...prev, [field]: value }));
     };
+    const handleChangeStatus = (field, value) => {
+        setFlyObject(prev => ({ ...prev, [field]: value }));
+        console.log(flyObject)
+        setEditableValues(flyObject)
+    };
 
     const cancelEdit = () => {
         setFlyObject(initialEditValues);
@@ -72,7 +78,7 @@ function CompanyDetails({ company, onBack }) {
                 await axios.delete(`${baseURL}/api/delete-company/${company._id}`);
                 console.log('company deleted successfully')
             } catch (error) {
-                console.log("error in deleting company",error)
+                console.log("error in deleting company", error)
             }
             onBack()
         }
@@ -166,15 +172,27 @@ function CompanyDetails({ company, onBack }) {
             </div>
             <div className="card mb-3 status-card">
                 <div className="card-body">
-                    <div className="d-flex justify-content-between gap-2">
-                        <div className="status-card-list">
-                            <ul>
-                                <li>Open</li>
-                                <li>Qualified</li>
-                                <li>Closed</li>
-                            </ul>
-                        </div>
-                        <div><button className="btn btn-primary">Mark status as Completed</button></div>
+                    <div className="btn-group" role="group" aria-label="Basic radio toggle button group">
+                        <input type="radio" className="btn-check" name="btnradio" id="btnradio1" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="open" checked={flyObject.status === "open" ? true : false} />
+                        <label className="btn btn-outline-primary" for="btnradio1">Open</label>
+
+                        <input type="radio" className="btn-check" name="btnradio" id="btnradio2" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="qualified" checked={flyObject.status === "qualified" ? true : false}/>
+                        <label className="btn btn-outline-primary" for="btnradio2">Qualified</label>
+
+                        <input type="radio" className="btn-check" name="btnradio" id="btnradio3" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="unqualified" checked={flyObject.status === "unqualified" ? true : false}/>
+                        <label className="btn btn-outline-primary" for="btnradio3">Unqualified</label>
+
+                        <input type="radio" className="btn-check" name="btnradio" id="btnradio4" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="opportunity" checked={flyObject.status === "opportunity" ? true : false}/>
+                        <label className="btn btn-outline-primary" for="btnradio4">Opportunity</label>
+
+                        <input type="radio" className="btn-check" name="btnradio" id="btnradio5" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="loss" checked={flyObject.status === "loss" ? true : false}/>
+                        <label className="btn btn-outline-primary" for="btnradio5">Loss</label>
+
+                        <input type="radio" className="btn-check" name="btnradio" id="btnradio6" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="won" checked={flyObject.status === "won" ? true : false}/>
+                        <label className="btn btn-outline-primary" for="btnradio6">Won</label>
+
+                        <input type="radio" className="btn-check" name="btnradio" id="btnradio7" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="span" checked={flyObject.status === "span" ? true : false}/>
+                        <label className="btn btn-outline-primary" for="btnradio7">Span</label>
                     </div>
                 </div>
             </div>
@@ -302,7 +320,7 @@ function CompanyDetails({ company, onBack }) {
                                             <div className="card-body pb-1">
 
                                                 <div>
-                                                    <div className="comment-text mb-2">{comment.comment_text}</div>
+                                                    <div className="comment-text mb-2"><pre style={{ fontFamily: "inherit" }}>{comment.comment_text}</pre></div>
                                                     <hr className="m-0 mt-3 mb-2" />
                                                     <div className="comment-timestamp d-flex justify-content-between align-items-baseline">
                                                         <div>

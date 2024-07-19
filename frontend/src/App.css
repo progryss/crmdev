@@ -1,5 +1,9 @@
+.customerTable td{
+  word-break: break-all;
+}
+
 .customerTable {
-  height: 425px;
+  height: calc( 100vh - 310px );
   overflow: scroll;
 }
 

@@ -300,9 +300,25 @@ const uploadCompanyData = async (req, res) => {
             status: 'open'
         }));
 
-        // Insert data into MongoDB
-        await CompanyDatabase.insertMany(transformedData);
-        res.status(200).send('File uploaded and processed successfully.');
+        const dataToAdd = [];
+        const duplicateCompany = []
+        for (let element of transformedData){
+            let response = await CompanyDatabase.findOne({ companyName: element.companyName});
+            if(!response){
+                dataToAdd.push(element)
+            }else{
+                duplicateCompany.push(element)
+            }
+
+        }
+        if(dataToAdd.length > 0){
+            // Insert data into MongoDB
+            await CompanyDatabase.insertMany(dataToAdd);
+            res.status(200).send(`File uploaded successfully.${duplicateCompany.length > 0 ? duplicateCompany.length + " record already exist" : "" }`);
+        }else{
+            res.status(200).send('No new file to upload')
+        }
+        
 
     } catch (error) {
         console.error('Error in uploading company data:', error);

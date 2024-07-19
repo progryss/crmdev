@@ -317,8 +317,8 @@ export default function Customer() {
                                   width={columnWidths[column.id] || 100}
                                   height={23}
                                   axis="x"
-                                  minConstraints={[50, 30]}
-                                  maxConstraints={[200, 23]}
+                                  minConstraints={[10, 30]}
+                                  maxConstraints={[2000, 23]}
                                   resizeHandles={["e"]}
                                   className="resize-handle"
                                   onResizeStop={(e, data) => handleResize(column.id, data.size.width)}

@@ -193,6 +193,9 @@ export default function AddCustomer() {
                             <option value="Core Engineering">Core Engineering</option>
                             <option value="Retail &amp; Ecommerce">Retail &amp; Ecommerce</option>
                             <option value="Mentainance &amp; Support">Mentainance &amp; Support</option>
+                            <option value="SEO">SEO</option>
+                            <option value="PPC">PPC</option>
+                            <option value="Digital Marketing">Digital Marketing</option>
                           </select>
                         </div>
 
@@ -349,7 +352,7 @@ export default function AddCustomer() {
                               ) : (
                                 <>
                                   <div>
-                                    <div className="comment-text mb-2">{comment.text}</div>
+                                    <div className="comment-text mb-2"><pre style={{fontFamily:"inherit"}}>{comment.text}</pre></div>
                                     <div className="comment-timestamp">{comment.timestamp}</div>
                                   </div>
                                   <div>
