@@ -3,10 +3,19 @@ const router =express.Router();
 const allController = require('../controllers/auth-controller');
 
 const multer = require('multer');
-// Configuring multer for file storage
+const path = require('path');
+const fs = require('fs');
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/');
+        const targetPath = path.join(__dirname, '../../uploads'); 
+        fs.mkdir(targetPath, { recursive: true }, (err) => {
+            if (err) {
+                console.error('Failed to create directory', err);
+                return cb(err);
+            }
+            cb(null, targetPath);
+        });
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);

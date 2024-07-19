@@ -266,7 +266,7 @@ const uploadCompanyData = async (req, res) => {
     if (!req.file) {
         return res.status(404).send('No file uploaded');
     }
-    const filePath = path.join(__dirname, '../uploads', req.file.filename);
+    const filePath = path.join(__dirname, '../../uploads', req.file.filename);
 
     try {
         // Asynchronously read file content
@@ -309,7 +309,7 @@ const uploadCompanyData = async (req, res) => {
         res.status(500).send('Error in processing file: ' + error.message);
     } finally {
         // Cleanup: delete the uploaded file after processing
-        // await fs.unlink(filePath);
+        await fs.unlink(filePath);
     }
 };
 
