@@ -38,7 +38,7 @@ export default function AddCustomer() {
     startFrom: "",
     seoActivity: "",
 
-    status: "open",
+    status: "Open",
     leadSource: ""
   });
 
@@ -118,7 +118,7 @@ export default function AddCustomer() {
       seoActivity: newEnquiry.seoActivity,
 
       date: formatted,
-      status: 'open',
+      status: 'Open',
       leadSource: newEnquiry.leadSource,
       comments: commentsList.map(comment => ({
         comment_text: comment.text,
@@ -155,7 +155,7 @@ export default function AddCustomer() {
         startFrom: "",
         seoActivity: "",
 
-        status: "open",
+        status: "Open",
         leadSource: ""
       })
 

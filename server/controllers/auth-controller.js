@@ -325,7 +325,7 @@ const uploadCompanyData = async (req, res) => {
             email: '',
             phone: '',
             comments: [],
-            status: 'open'
+            status: 'Open'
         }));
 
         const dataToAdd = [];
