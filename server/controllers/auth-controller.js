@@ -29,23 +29,38 @@ async function createEnquiry(req, res) {
     try {
         const request = await req.body;
         const mappedEnquiry = {
-            date: request.date,
+            
             name: request.name,
             email: request.email,
-            country: request.country,
             phone: request.phone,
+            linkedinUrl: request.linkedinUrl,
+            city: request.city,
+            country: request.country,
             message: request.message,
+
+            companyName: request.companyName,
+            companyPhone: request.companyPhone,
+            website_url: request.website_url,
+            size: request.size,
+            rating: request.rating,
+            reviews: request.reviews,
+            minimumProjects: request.minimumProjects,
+            hourlyRate: request.hourlyRate,
+
             page_url: request.page_url,
-            status: request.status,
             service: request.service,
             budget: request.budget,
             startFrom: request.startFrom,
-            website_url: request.website_url,
             seoActivity: request.seoActivity,
+
+            date: request.date,
+            status: request.status,
+            leadSource: request.leadSource,
             comments: request.comments.map(comment => ({
                 comment_text: comment.comment_text,
                 comment_date: comment.comment_date
             }))
+            
         };
         const newEnquiry = new CustomerEnquiry(mappedEnquiry);
         await newEnquiry.save();
@@ -101,19 +116,32 @@ const updateEnquiry = async (req, res) => {
             enquiryId,
             {
                 $set: {
-                    date: updateData.date,
                     name: updateData.name,
                     email: updateData.email,
-                    country: updateData.country,
                     phone: updateData.phone,
+                    linkedinUrl: updateData.linkedinUrl,
+                    city: updateData.city,
+                    country: updateData.country,
                     message: updateData.message,
+
+                    companyName: updateData.companyName,
+                    companyPhone:updateData.companyPhone,
+                    website_url: updateData.website_url,
+                    size: updateData.size,
+                    rating: updateData.rating,
+                    reviews: updateData.reviews,
+                    minimumProjects: updateData.minimumProjects,
+                    hourlyRate: updateData.hourlyRate,
+
                     page_url: updateData.page_url,
-                    status: updateData.status,
                     service: updateData.service,
                     budget: updateData.budget,
                     startFrom: updateData.startFrom,
-                    website_url: updateData.website_url,
                     seoActivity: updateData.seoActivity,
+
+                    date: updateData.date,
+                    status: updateData.status,
+                    leadSource: updateData.leadSource,
                     comments: updateData.comments.map(comment => ({
                         comment_text: comment.comment_text,
                         comment_date: comment.comment_date

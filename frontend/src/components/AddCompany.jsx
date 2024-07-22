@@ -170,7 +170,7 @@ export default function AddCompany() {
                                 <div className="card-body">
                                     <div className="form-grid-main">
                                         <div className="form-grid">
-                                            <div className="form-grid-column-one">
+                                            <div className="first-column-box">
                                                 <div className="mb-4">
                                                     <label htmlFor="companyName" className="form-label label-value">Company Name</label>
                                                     <input
@@ -182,7 +182,6 @@ export default function AddCompany() {
                                                         placeholder="Company name"
                                                     />
                                                 </div>
-                                               
                                                 <div className="mb-4">
                                                     <label htmlFor="rating" className="form-label label-value">Rating</label>
                                                     <input
@@ -271,9 +270,6 @@ export default function AddCompany() {
                                                         placeholder=""
                                                     />
                                                 </div>
-
-                                            </div>
-                                            <div className="form-grid-column-two">
                                                 <div className="mb-4">
                                                     <label htmlFor="name" className="form-label label-value">Name</label>
                                                     <input
@@ -410,7 +406,7 @@ export default function AddCompany() {
                                                             ) : (
                                                                 <>
                                                                     <div>
-                                                                        <div className="comment-text mb-2"><pre style={{fontFamily:"inherit"}}>{comment.text}</pre></div>
+                                                                        <div className="comment-text mb-2"><pre style={{ fontFamily: "inherit" }}>{comment.text}</pre></div>
                                                                         <div className="comment-timestamp">{comment.timestamp}</div>
                                                                     </div>
                                                                     <div>

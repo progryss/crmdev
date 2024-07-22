@@ -251,16 +251,28 @@ color: #858383;
   max-width: 150px; 
 } */
 
+.leadWrapper{
+  width: 235px;
+    float: right;
+    align-items: center;
+    display: flex;
+}
+
+.leadWrapper .label-title{
+  width: 160px;
+}
 
 .customer-details-grid{
   display:grid;
   grid-template-columns:3fr 2fr;
   gap:15px;
 }
-.two-column-layout,.form-grid{
+.first-column-box,
+.second-column-box,
+.third-column-box{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:30px;
+  column-gap: 20px;
 }
 .detail-tab-box{
   border-bottom: 1px solid #ddd;

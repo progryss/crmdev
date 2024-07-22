@@ -13,18 +13,34 @@ export default function AddCustomer() {
   const [comment, setComment] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
   const [editingComment, setEditingComment] = useState("");
-  const [customerName, setCustomerName] = useState("");
-  const [country, setCountry] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [service, setService] = useState("");
-  const [budget, setBudget] = useState("");
-  const [startFrom, setStartFrom] = useState("");
-  const [website_url, setWebsite_url] = useState("");
-  const [seoActivity, setSeoActivity] = useState("");
-
   const { showNotification } = useNotification();
+
+  const [newEnquiry, setNewEnquiry] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    linkedinUrl: "",
+    city: "",
+    country: "",
+    message: "",
+
+    companyName: "",
+    website_url: "",
+    companyPhone: "",
+    size: "",
+    rating: "",
+    reviews: "",
+    minimumProjects: "",
+    hourlyRate: "",
+
+    service: "",
+    budget: "",
+    startFrom: "",
+    seoActivity: "",
+
+    status: "open",
+    leadSource: ""
+  });
 
   const handleCommentChange = (event) => {
     setComment(event.target.value);
@@ -78,19 +94,32 @@ export default function AddCustomer() {
     const formatted = date.toLocaleDateString('en-US', options);
     // Define the enquiry data
     const customerData = {
-      date: formatted, // Use current date-time
-      name: customerName,
-      country: country,
-      phone: phoneNumber,
-      email: email,
-      message: message,
-      status: 'Open',
-      service: service,
-      budget: budget,
-      startFrom: startFrom,
-      page_url: '',
-      website_url: website_url,
-      seoActivity: seoActivity,
+
+      name: newEnquiry.name,
+      email: newEnquiry.email,
+      phone: newEnquiry.phone,
+      linkedinUrl: newEnquiry.linkedinUrl,
+      city: newEnquiry.city,
+      country: newEnquiry.country,
+      message: newEnquiry.message,
+
+      companyName: newEnquiry.companyName,
+      website_url: newEnquiry.website_url,
+      companyPhone: newEnquiry.companyPhone,
+      size: newEnquiry.size,
+      rating: newEnquiry.rating,
+      reviews: newEnquiry.reviews,
+      minimumProjects: newEnquiry.minimumProjects,
+      hourlyRate: newEnquiry.hourlyRate,
+
+      service: newEnquiry.service,
+      budget: newEnquiry.budget,
+      startFrom: newEnquiry.startFrom,
+      seoActivity: newEnquiry.seoActivity,
+
+      date: formatted,
+      status: 'open',
+      leadSource: newEnquiry.leadSource,
       comments: commentsList.map(comment => ({
         comment_text: comment.text,
         comment_date: comment.timestamp
@@ -101,17 +130,34 @@ export default function AddCustomer() {
       // Make the POST request to create an enquiry
       const response = await axios.post(`${baseURL}/api/create-enquiry`, customerData);
       console.log(response.data);
-      setCustomerName("");
-      setEmail("");
-      setPhoneNumber("");
-      setCountry("");
       setCommentsList([]);
-      setMessage("");
-      setService("");
-      setBudget("");
-      setStartFrom("");
-      setWebsite_url("");
-      setSeoActivity("");
+
+      setNewEnquiry({
+        name: "",
+        email: "",
+        phone: "",
+        linkedinUrl: "",
+        city: "",
+        country: "",
+        message: "",
+
+        companyName: "",
+        website_url: "",
+        companyPhone: "",
+        size: "",
+        rating: "",
+        reviews: "",
+        minimumProjects: "",
+        hourlyRate: "",
+
+        service: "",
+        budget: "",
+        startFrom: "",
+        seoActivity: "",
+
+        status: "open",
+        leadSource: ""
+      })
 
       navigate('/customer');
     } catch (error) {
@@ -147,16 +193,61 @@ export default function AddCustomer() {
                 <div className="card-body">
                   <div className="form-grid-main">
                     <div className="form-grid">
-                      <div className="form-grid-column-one">
+                      <h6 className="mb-3">User Details</h6>
+                      <div className="first-column-box">
                         <div className="mb-4">
-                          <label htmlFor="customerName" className="form-label label-value">Name</label>
+                          <label htmlFor="name" className="form-label label-value">Name</label>
                           <input
                             type="text"
                             className="form-control"
-                            id="customerName"
-                            value={customerName}
-                            onChange={(event) => setCustomerName(event.target.value)}
+                            id="name"
+                            value={newEnquiry.name}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, name: e.target.value })}
                             placeholder="Enter customer's name"
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor="email" className="form-label label-value">Email</label>
+                          <input
+                            type="email"
+                            className="form-control"
+                            id="email"
+                            value={newEnquiry.email}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, email: e.target.value })}
+                            placeholder="Enter email address"
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor="phone" className="form-label label-value">Phone</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="phone"
+                            value={newEnquiry.phone}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, phone: e.target.value })}
+                            placeholder="Enter phone number"
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor="linkedinUrl" className="form-label label-value">Linkedin URL</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="linkedinUrl"
+                            value={newEnquiry.linkedinUrl}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, linkedinUrl: e.target.value })}
+                            placeholder="Enter Linkedin Url"
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor="city" className="form-label label-value">City</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="city"
+                            value={newEnquiry.city}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, city: e.target.value })}
+                            placeholder="Enter City"
                           />
                         </div>
                         <div className="mb-4">
@@ -164,8 +255,8 @@ export default function AddCustomer() {
                           <select
                             className="form-control"
                             id="country"
-                            value={country}
-                            onChange={(event) => setCountry(event.target.value)}
+                            value={newEnquiry.country}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, country: e.target.value })}
                           >
                             <option value="">Select Country</option>
                             <option value="India">India</option>
@@ -175,12 +266,117 @@ export default function AddCustomer() {
                           </select>
                         </div>
                         <div className="mb-4">
-                          <label htmlFor="service" className="form-label label-value">What are you looking for</label>
+                          <label htmlFor="message" className="form-label label-value">Message</label>
+                          <textarea
+                            className="form-control"
+                            id="message"
+                            rows="4"
+                            value={newEnquiry.message}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, message: e.target.value })}
+                            placeholder="Write your message here..."
+                          ></textarea>
+                        </div>
+                      </div>
+                      <h6 className="mb-3">Company Details</h6>
+                      <div className="second-column-box">
+                        <div className="mb-4">
+                          <label htmlFor="companyName" className="form-label label-value">Company Name</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="companyName"
+                            value={newEnquiry.companyName}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, companyName: e.target.value })}
+                            placeholder="Enter Company name"
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor="website_url" className="form-label label-value">Website Url</label>
+                          <input
+                            type="website_url"
+                            className="form-control"
+                            id="website_url"
+                            value={newEnquiry.website_url}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, website_url: e.target.value })}
+                            placeholder="Add website url"
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor="countryPhone" className="form-label label-value">Country Phone</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="countryPhone"
+                            value={newEnquiry.companyPhone}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, companyPhone: e.target.value })}
+                            placeholder="Enter Company Phone"
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor="size" className="form-label label-value">Size</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="size"
+                            value={newEnquiry.size}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, size: e.target.value })}
+                            placeholder="Company Size"
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor="rating" className="form-label label-value">Rating</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="rating"
+                            value={newEnquiry.rating}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, rating: e.target.value })}
+                            placeholder="Company Rating"
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor="reviews" className="form-label label-value">Reviews</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="reviews"
+                            value={newEnquiry.reviews}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, reviews: e.target.value })}
+                            placeholder="Company Reviews"
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor="minimumProjects" className="form-label label-value">Minimum Projects</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="minimumProjects"
+                            value={newEnquiry.minimumProjects}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, minimumProjects: e.target.value })}
+                            placeholder=""
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor="hourlyRate" className="form-label label-value">Hourly Rate</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="hourlyRate"
+                            value={newEnquiry.hourlyRate}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, hourlyRate: e.target.value })}
+                            placeholder=""
+                          />
+                        </div>
+                      </div>
+                      <h6 className="mb-3">Other Details</h6>
+                      <div className="third-column-box">
+                        <div className="mb-4">
+                          <label htmlFor="service" className="form-label label-value">Services</label>
                           <select
                             className="form-control"
                             id="service"
-                            value={service}
-                            onChange={(event) => setService(event.target.value)}
+                            value={newEnquiry.service}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, service: e.target.value })}
                           >
                             <option value="">What are you looking for</option>
                             <option value="Consulting">Consulting</option>
@@ -198,80 +394,13 @@ export default function AddCustomer() {
                             <option value="Digital Marketing">Digital Marketing</option>
                           </select>
                         </div>
-
-                        <div className="mb-4">
-                          <label htmlFor="startFrom" className="form-label label-value">When to start</label>
-                          <select
-                            className="form-control"
-                            id="startFrom"
-                            value={startFrom}
-                            onChange={(event) => setStartFrom(event.target.value)}
-                          >
-                            <option value="">When to Start</option>
-                            <option value="Right Now">Right Now</option>
-                            <option value="In Few Weeks">In Few Weeks</option>
-                            <option value="In Few Months">In Few Months</option>
-                            <option value="Not Sure">Not Sure</option>
-                          </select>
-                        </div>
-
-                        <div className="mb-4">
-                          <label htmlFor="seoActivity" className="form-label label-value">Seo Activity</label>
-                          <select
-                            className="form-control"
-                            id="seoActivity"
-                            value={seoActivity}
-                            onChange={(event) => setSeoActivity(event.target.value)}
-                          >
-                            <option value="">How are your SEO activities managed now?</option>
-                            <option value="Right Now">Via an Agency</option>
-                            <option value="In Few Weeks">In-house Team</option>
-                            <option value="In Few Months">SEO activities not initiated yet</option>
-                          </select>
-                        </div>
-
-                      </div>
-                      <div className="form-grid-column-two">
-                        <div className="mb-4">
-                          <label htmlFor="phoneNumber" className="form-label label-value">Phone Number</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="phoneNumber"
-                            value={phoneNumber}
-                            onChange={(event) => setPhoneNumber(event.target.value)}
-                            placeholder="Enter phone number"
-                          />
-                        </div>
-                        <div className="mb-4">
-                          <label htmlFor="email" className="form-label label-value">Email</label>
-                          <input
-                            type="email"
-                            className="form-control"
-                            id="email"
-                            value={email}
-                            onChange={(event) => setEmail(event.target.value)}
-                            placeholder="Enter email address"
-                          />
-                        </div>
-                        <div className="mb-4">
-                          <label htmlFor="website_url" className="form-label label-value">Website Url</label>
-                          <input
-                            type="website_url"
-                            className="form-control"
-                            id="website_url"
-                            value={website_url}
-                            onChange={(event) => setWebsite_url(event.target.value)}
-                            placeholder="Add website url"
-                          />
-                        </div>
                         <div className="mb-4">
                           <label htmlFor="budget" className="form-label label-value">Project Budget</label>
                           <select
                             className="form-control"
                             id="budget"
-                            value={budget}
-                            onChange={(event) => setBudget(event.target.value)}
+                            value={newEnquiry.budget}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, budget: e.target.value })}
                           >
                             <option value="">Project Budget</option>
                             <option value="2k - 5k USD">2k - 5k USD</option>
@@ -282,19 +411,59 @@ export default function AddCustomer() {
                             <option value="Not Sure">Not Sure</option>
                           </select>
                         </div>
+                        <div className="mb-4">
+                          <label htmlFor="startFrom" className="form-label label-value">When to start</label>
+                          <select
+                            className="form-control"
+                            id="startFrom"
+                            value={newEnquiry.startFrom}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, startFrom: e.target.value })}
+                          >
+                            <option value="">When to Start</option>
+                            <option value="Right Now">Right Now</option>
+                            <option value="In Few Weeks">In Few Weeks</option>
+                            <option value="In Few Months">In Few Months</option>
+                            <option value="Not Sure">Not Sure</option>
+                          </select>
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor="seoActivity" className="form-label label-value">Seo Activity</label>
+                          <select
+                            className="form-control"
+                            id="seoActivity"
+                            value={newEnquiry.seoActivity}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, seoActivity: e.target.value })}
+                          >
+                            <option value="">How are your SEO activities managed now?</option>
+                            <option value="Right Now">Via an Agency</option>
+                            <option value="In Few Weeks">In-house Team</option>
+                            <option value="In Few Months">SEO activities not initiated yet</option>
+                          </select>
+                        </div>
+                        <div className="mb-4">
+                          <label htmlFor="leadSource" className="form-label label-value">Lead Source:</label>
+                          <select
+                            className="form-control"
+                            id="leadSource"
+                            value={newEnquiry.leadSource}
+                            onChange={(e) => setNewEnquiry({ ...newEnquiry, leadSource: e.target.value })}
+                          >
+                            <option value="">Select</option>
+                            <option value="Website">Website</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="Facebook">Facebook</option>
+                            <option value="SEO">SEO</option>
+                            <option value="PPC">PPC</option>
+                            <option value="Linkedin">Linkedin</option>
+                            <option value="Clutch">Clutch</option>
+                            <option value="WhatsApp">WhatsApp</option>
+                            <option value="Call">Call</option>
+
+                          </select>
+                        </div>
                       </div>
                     </div>
-                    <div className="mb-4">
-                      <label htmlFor="message" className="form-label label-value">Message</label>
-                      <textarea
-                        className="form-control"
-                        id="message"
-                        rows="4"
-                        value={message}
-                        onChange={(event) => setMessage(event.target.value)}
-                        placeholder="Write your message here..."
-                      ></textarea>
-                    </div>
+
                     <button
                       type="submit"
                       className="btn btn-success"
@@ -352,7 +521,7 @@ export default function AddCustomer() {
                               ) : (
                                 <>
                                   <div>
-                                    <div className="comment-text mb-2"><pre style={{fontFamily:"inherit"}}>{comment.text}</pre></div>
+                                    <div className="comment-text mb-2"><pre style={{ fontFamily: "inherit" }}>{comment.text}</pre></div>
                                     <div className="comment-timestamp">{comment.timestamp}</div>
                                   </div>
                                   <div>

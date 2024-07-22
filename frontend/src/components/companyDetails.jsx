@@ -62,8 +62,7 @@ function CompanyDetails({ company, onBack }) {
     };
     const handleChangeStatus = (field, value) => {
         setFlyObject(prev => ({ ...prev, [field]: value }));
-        console.log(flyObject)
-        setEditableValues(flyObject)
+        setEditableValues(prev => ({ ...prev, [field]: value }))
     };
 
     const cancelEdit = () => {
@@ -186,13 +185,13 @@ function CompanyDetails({ company, onBack }) {
                         <label className="btn btn-outline-primary" for="btnradio4">Opportunity</label>
 
                         <input type="radio" className="btn-check" name="btnradio" id="btnradio5" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="loss" checked={flyObject.status === "loss" ? true : false}/>
-                        <label className="btn btn-outline-primary" for="btnradio5">Loss</label>
+                        <label className="btn btn-outline-primary" for="btnradio5">Lost</label>
 
                         <input type="radio" className="btn-check" name="btnradio" id="btnradio6" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="won" checked={flyObject.status === "won" ? true : false}/>
                         <label className="btn btn-outline-primary" for="btnradio6">Won</label>
 
                         <input type="radio" className="btn-check" name="btnradio" id="btnradio7" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="span" checked={flyObject.status === "span" ? true : false}/>
-                        <label className="btn btn-outline-primary" for="btnradio7">Span</label>
+                        <label className="btn btn-outline-primary" for="btnradio7">Spam</label>
                     </div>
                 </div>
             </div>

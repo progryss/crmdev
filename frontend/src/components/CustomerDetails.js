@@ -6,19 +6,34 @@ function CustomerDetails({ customer, onBack }) {
 
   const baseURL = process.env.REACT_APP_BASE_URL || 'https://crm.progryss.com';
   const initialEditValues = {
-    date: customer.date,
+
     name: customer.name,
     email: customer.email,
-    country: customer.country,
     phone: customer.phone,
+    linkedinUrl: customer.linkedinUrl,
+    city: customer.city,
+    country: customer.country,
     message: customer.message,
+
+    companyName: customer.companyName,
+    companyPhone: customer.companyPhone,
+    website_url: customer.website_url,
+    size: customer.size,
+    rating: customer.rating,
+    reviews: customer.reviews,
+    minimumProjects: customer.minimumProjects,
+    hourlyRate: customer.hourlyRate,
+
     page_url: customer.page_url,
-    comments: customer.comments,
     service: customer.service,
     budget: customer.budget,
     startFrom: customer.startFrom,
-    website_url: customer.website_url,
-    seoActivity: customer.seoActivity
+    seoActivity: customer.seoActivity,
+
+    date: customer.date,
+    status: customer.status,
+    leadSource: customer.leadSource,
+    comments: customer.comments
   };
 
   const [comment, setComment] = useState("");
@@ -55,6 +70,11 @@ function CustomerDetails({ customer, onBack }) {
     setFlyObject(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleChangeStatus = (field, value) => {
+    setFlyObject(prev => ({ ...prev, [field]: value }));
+    setEditableValues(prev => ({ ...prev, [field]: value }))
+  };
+
   const cancelEdit = () => {
     setFlyObject(initialEditValues);
     setIsReadOnly(true);
@@ -76,7 +96,7 @@ function CustomerDetails({ customer, onBack }) {
   }
 
   useEffect(() => {
-    // console.log('useeffect')
+    console.log('useeffect')
     hit()
   }, [editableValues])
 
@@ -157,39 +177,86 @@ function CustomerDetails({ customer, onBack }) {
           </div>
         </div>
       </div>
+
       <div className="card mb-3 status-card">
         <div className="card-body">
-          <div className="d-flex justify-content-between gap-2">
-            <div className="status-card-list">
-              <ul>
-                <li>Open</li>
-                <li>Qualified</li>
-                <li>Closed</li>
-              </ul>
-            </div>
-            <div><button className="btn btn-primary">Mark status as Completed</button></div>
+          <div className="btn-group" role="group" aria-label="Basic radio toggle button group">
+            <input type="radio" className="btn-check" name="btnradio" id="btnradio1" onClick={(e) => handleChangeStatus('status', e.target.value)} autocomplete="off" value="open" checked={flyObject.status === "open" ? true : false} />
+            <label className="btn btn-outline-primary" for="btnradio1">Open</label>
+
+            <input type="radio" className="btn-check" name="btnradio" id="btnradio2" onClick={(e) => handleChangeStatus('status', e.target.value)} autocomplete="off" value="qualified" checked={flyObject.status === "qualified" ? true : false} />
+            <label className="btn btn-outline-primary" for="btnradio2">Qualified</label>
+
+            <input type="radio" className="btn-check" name="btnradio" id="btnradio3" onClick={(e) => handleChangeStatus('status', e.target.value)} autocomplete="off" value="unqualified" checked={flyObject.status === "unqualified" ? true : false} />
+            <label className="btn btn-outline-primary" for="btnradio3">Unqualified</label>
+
+            <input type="radio" className="btn-check" name="btnradio" id="btnradio4" onClick={(e) => handleChangeStatus('status', e.target.value)} autocomplete="off" value="opportunity" checked={flyObject.status === "opportunity" ? true : false} />
+            <label className="btn btn-outline-primary" for="btnradio4">Opportunity</label>
+
+            <input type="radio" className="btn-check" name="btnradio" id="btnradio5" onClick={(e) => handleChangeStatus('status', e.target.value)} autocomplete="off" value="loss" checked={flyObject.status === "loss" ? true : false} />
+            <label className="btn btn-outline-primary" for="btnradio5">Lost</label>
+
+            <input type="radio" className="btn-check" name="btnradio" id="btnradio6" onClick={(e) => handleChangeStatus('status', e.target.value)} autocomplete="off" value="won" checked={flyObject.status === "won" ? true : false} />
+            <label className="btn btn-outline-primary" for="btnradio6">Won</label>
+
+            <input type="radio" className="btn-check" name="btnradio" id="btnradio7" onClick={(e) => handleChangeStatus('status', e.target.value)} autocomplete="off" value="span" checked={flyObject.status === "span" ? true : false} />
+            <label className="btn btn-outline-primary" for="btnradio7">Spam</label>
+          </div>
+          <div className="leadWrapper">
+            <div className="label-title">Lead Source:</div>
+            <select
+              className="label-value"
+              value={flyObject.leadSource}
+              // onChange={(e) => handleChange('leadSource', e.target.value)}
+              // disabled={isReadOnly}
+            >
+              <option value="">Select</option>
+              <option value="Website">Website</option>
+              <option value="Instagram">Instagram</option>
+              <option value="Facebook">Facebook</option>
+              <option value="SEO">SEO</option>
+              <option value="PPC">PPC</option>
+              <option value="Linkedin">Linkedin</option>
+              <option value="Clutch">Clutch</option>
+              <option value="WhatsApp">WhatsApp</option>
+              <option value="Call">Call</option>
+            </select>
           </div>
         </div>
       </div>
+
       <div className="customer-details-grid">
         <div className="card mb-3">
           <div className="card-body">
             <div className="detail-tab-box d-flex justify-content-between pb-2">
+              <div></div>
               <div>
-                <span>Details</span>
-              </div>
-              <div>
-
                 {!isReadOnly ? (<><button className="btn btn-primary me-2 btn-sm" onClick={cancelEdit}>Cancel</button><button className="btn btn-primary me-2 saveBtn btn-sm" onClick={saveEnquiry}>Update</button></>) : (<><button className='btn btn-link me-2 updateBtn' onClick={editEnquiry}><i className="fa fa-edit"></i></button><button className="btn btn-link text-danger me-2 deleteBtn" onClick={deleteQuery}><i className="fa fa-trash"></i></button></>)}
               </div>
             </div>
             <div className="two-column-layout">
+              <h6 className="mb-3">User Details</h6>
               <div className="first-column-box">
                 <div className="mb-4">
                   <div className="label-title">Name:</div>
                   <input className="label-value" onChange={(e) => handleChange('name', e.target.value)} value={flyObject.name} readOnly={isReadOnly} />
                 </div>
-
+                <div className="mb-4">
+                  <div className="label-title">Email:</div>
+                  <input className="label-value" onChange={(e) => handleChange('email', e.target.value)} readOnly={isReadOnly} value={flyObject.email} />
+                </div>
+                <div className="mb-4">
+                  <div className="label-title">Phone Number:</div>
+                  <input className="label-value" onChange={(e) => handleChange('phone', e.target.value)} readOnly={isReadOnly} value={flyObject.phone} />
+                </div>
+                <div className="mb-4">
+                  <div className="label-title">Linkedin URL:</div>
+                  <input className="label-value" onChange={(e) => handleChange('linkedinUrl', e.target.value)} readOnly={isReadOnly} value={flyObject.linkedinUrl} />
+                </div>
+                <div className="mb-4">
+                  <div className="label-title">City:</div>
+                  <input className="label-value" onChange={(e) => handleChange('city', e.target.value)} readOnly={isReadOnly} value={flyObject.city} />
+                </div>
                 <div className="mb-4">
                   <div className="label-title">Country:</div>
                   <select
@@ -205,9 +272,51 @@ function CustomerDetails({ customer, onBack }) {
                     <option value="Australia">Australia</option>
                   </select>
                 </div>
-
                 <div className="mb-4">
-                  <div className="label-title">Service:</div>
+                  <div className="label-title">Message:</div>
+                  <textarea style={{ overflowY: 'scroll' }} rows="3" className="label-value" onChange={(e) => handleChange('message', e.target.value)} readOnly={isReadOnly} value={flyObject.message || ""} />
+                </div>
+              </div>
+              <h6 className="mb-3">Company Details</h6>
+              <div className="second-column-box">
+                <div className="mb-4">
+                  <div className="label-title">Company Name:</div>
+                  <input className="label-value" onChange={(e) => handleChange('companyName', e.target.value)} readOnly={isReadOnly} value={flyObject.companyName} />
+                </div>
+                <div className="mb-4">
+                  <div className="label-title">Website Url:</div>
+                  <input className="label-value" onChange={(e) => handleChange('website_url', e.target.value)} readOnly={isReadOnly} value={flyObject.website_url} />
+                </div>
+                <div className="mb-4">
+                  <div className="label-title">Company Phone:</div>
+                  <input className="label-value" onChange={(e) => handleChange('companyPhone', e.target.value)} readOnly={isReadOnly} value={flyObject.companyPhone} />
+                </div>
+                <div className="mb-4">
+                  <div className="label-title">Company Size:</div>
+                  <input className="label-value" onChange={(e) => handleChange('size', e.target.value)} readOnly={isReadOnly} value={flyObject.size} />
+                </div>
+                <div className="mb-4">
+                  <div className="label-title">Rating:</div>
+                  <input className="label-value" onChange={(e) => handleChange('rating', e.target.value)} readOnly={isReadOnly} value={flyObject.rating} />
+                </div>
+                <div className="mb-4">
+                  <div className="label-title">Reviews:</div>
+                  <input className="label-value" onChange={(e) => handleChange('reviews', e.target.value)} readOnly={isReadOnly} value={flyObject.reviews} />
+                </div>
+                <div className="mb-4">
+                  <div className="label-title">Minimum Projects:</div>
+                  <input className="label-value" onChange={(e) => handleChange('minimumProjects', e.target.value)} readOnly={isReadOnly} value={flyObject.minimumProjects} />
+                </div>
+                <div className="mb-4">
+                  <div className="label-title">Hourly Rate:</div>
+                  <input className="label-value" onChange={(e) => handleChange('hourlyRate', e.target.value)} readOnly={isReadOnly} value={flyObject.hourlyRate} />
+                </div>
+              </div>
+              <h6 className="mb-3">Other Details</h6>
+              <div className="third-column-box">
+                
+                <div className="mb-4">
+                  <div className="label-title">Services:</div>
                   <select
                     className="label-value"
                     value={flyObject.service}
@@ -215,70 +324,21 @@ function CustomerDetails({ customer, onBack }) {
                     disabled={isReadOnly}
                   >
                     <option value="">What are you looking for</option>
-                    <option value="Consulting">Consulting</option>
+                    <option value="Shopify Development">Shopify Development</option>
+                    <option value="SEO (Search Engine Optimization)">SEO (Search Engine Optimization)</option>
+                    <option value="PPC (Pay Per Click)">PPC (Pay Per Click)</option>
+                    <option value="SMM (Social Media Marketing)">SMM (Social Media Marketing)</option>
+                    <option value="Digital Marketing">Digital Marketing</option>
                     <option value="Design">Design</option>
-                    <option value="CMS &amp; Platform">CMS &amp; Platform</option>
+                    <option value="CMS & Platform">CMS & Platform</option>
                     <option value="Web Frameworks">Web Frameworks</option>
-                    <option value="Infra &amp; Product Lifecycle">Infra &amp; Product Lifecycle</option>
+                    <option value="Infra & Product Lifecycle">Infra & Product Lifecycle</option>
                     <option value="Next Generation Technology">Next Generation Technology</option>
                     <option value="Mobility">Mobility</option>
                     <option value="Core Engineering">Core Engineering</option>
-                    <option value="Retail &amp; Ecommerce">Retail &amp; Ecommerce</option>
-                    <option value="Mentainance &amp; Support">Mentainance &amp; Support</option>
+                    <option value="Retail & Ecommerce">Retail & Ecommerce</option>
+                    <option value="Mentainance & Support">Mentainance & Support</option>
                   </select>
-                </div>
-
-                <div className="mb-4">
-                  <div className="label-title">When to start:</div>
-                  <select
-                    className="label-value"
-                    value={flyObject.startFrom}
-                    onChange={(e) => handleChange('startFrom', e.target.value)}
-                    disabled={isReadOnly}
-                  >
-                    <option value="">When to Start</option>
-                    <option value="Right Now">Right Now</option>
-                    <option value="In Few Weeks">In Few Weeks</option>
-                    <option value="In Few Months">In Few Months</option>
-                    <option value="Not Sure">Not Sure</option>
-                  </select>
-                </div>
-
-
-                <div className="mb-4">
-                  <div className="label-title">Seo Activity:</div>
-                  <select
-                    className="label-value"
-                    value={flyObject.seoActivity}
-                    onChange={(e) => handleChange('seoActivity', e.target.value)}
-                    disabled={isReadOnly}
-                  >
-                    <option value="">How are your SEO activities managed now?</option>
-                    <option value="Right Now">Via an Agency</option>
-                    <option value="In Few Weeks">In-house Team</option>
-                    <option value="In Few Months">SEO activities not initiated yet</option>
-                  </select>
-                </div>
-
-
-
-              </div>
-              <div className="second-column-box">
-                <div className="mb-4">
-                  <div className="label-title">Phone Number:</div>
-                  <input className="label-value" onChange={(e) => handleChange('phone', e.target.value)} readOnly={isReadOnly} value={flyObject.phone} />
-                </div>
-                <div className="mb-4">
-                  <div className="label-title">Email:</div>
-                  <input className="label-value" onChange={(e) => handleChange('email', e.target.value)} readOnly={isReadOnly} value={flyObject.email} />
-                </div>
-                <div className="mb-4">
-                  <div className="label-title">Website Url:</div>
-                  <input className="label-value" onChange={(e) => handleChange('website_url', e.target.value)} readOnly={isReadOnly} value={flyObject.website_url} />
-                </div>
-                <div className="mb-4">
-                  <div className="label-title">Page URL:</div>
-                  <textarea className="label-value" rows="3" onChange={(e) => handleChange('page_url', e.target.value)} readOnly={isReadOnly} value={flyObject.page_url} />
                 </div>
                 <div className="mb-4">
                   <div className="label-title">Project Budget:</div>
@@ -297,13 +357,43 @@ function CustomerDetails({ customer, onBack }) {
                     <option value="Not Sure">Not Sure</option>
                   </select>
                 </div>
+                <div className="mb-4">
+                  <div className="label-title">When to start:</div>
+                  <select
+                    className="label-value"
+                    value={flyObject.startFrom}
+                    onChange={(e) => handleChange('startFrom', e.target.value)}
+                    disabled={isReadOnly}
+                  >
+                    <option value="">When to Start</option>
+                    <option value="Right Now">Right Now</option>
+                    <option value="In Few Weeks">In Few Weeks</option>
+                    <option value="In Few Months">In Few Months</option>
+                    <option value="Not Sure">Not Sure</option>
+                  </select>
+                </div>
+                <div className="mb-4">
+                  <div className="label-title">Seo Activity:</div>
+                  <select
+                    className="label-value"
+                    value={flyObject.seoActivity}
+                    onChange={(e) => handleChange('seoActivity', e.target.value)}
+                    disabled={isReadOnly}
+                  >
+                    <option value="">How are your SEO activities managed now?</option>
+                    <option value="Right Now">Via an Agency</option>
+                    <option value="In Few Weeks">In-house Team</option>
+                    <option value="In Few Months">SEO activities not initiated yet</option>
+                  </select>
+                </div>
+                <div className="mb-4">
+                  <div className="label-title">Page URL:</div>
+                  <textarea className="label-value" rows="3" onChange={(e) => handleChange('page_url', e.target.value)} readOnly={isReadOnly} value={flyObject.page_url} />
+                </div>
               </div>
 
             </div>
-            <div className="mb-4">
-              <div className="label-title">Message:</div>
-              <textarea style={{ overflowY: 'scroll' }} rows="5" className="label-value" onChange={(e) => handleChange('message', e.target.value)} readOnly={isReadOnly} value={flyObject.message || ""} />
-            </div>
+
           </div>
         </div>
         <div className="card mb-3">
@@ -331,7 +421,7 @@ function CustomerDetails({ customer, onBack }) {
                       <div className="card-body pb-1">
 
                         <div>
-                          <div className="comment-text mb-2"><pre style={{fontFamily:"inherit"}}>{comment.comment_text}</pre></div>
+                          <div className="comment-text mb-2"><pre style={{ fontFamily: "inherit" }}>{comment.comment_text}</pre></div>
                           <hr className="m-0 mt-3 mb-2" />
                           <div className="comment-timestamp d-flex justify-content-between align-items-baseline">
                             <div>

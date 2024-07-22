@@ -2,49 +2,75 @@ const mongoose = require('mongoose');
 
 // define schema for enquiry data
 const customerEnquirySchema = new mongoose.Schema({
-    date: {
-        type: String,
-        // default: Date.now,  // Automatically set to current date
-        // required: true
-    },
+    
+    // user details
     name: {
         type: String,
-        required: true,
-        trim: true       // Remove whitespace from both ends
+        default: ""
     },
     email: {
         type: String,
-        // required: true,
-        // trim: true,
-        // match: [/\S+@\S+\.\S+/, 'is invalid'],  // Email validation regex
-        // lowercase: true
-    },
-    country: {
-        type: String,
-        required: true,  // Country is required
-        trim: true
+        default: ""
     },
     phone: {
         type: String,
-        // required: true,
-        // match: [/^\d{10,15}$/, 'is invalid'],  // Phone number should be 10-15 digits
-        trim: true
+        default: ""
+    },
+    linkedinUrl: {
+        type: String,
+        default: ""
+    },
+    city: {
+        type : String,
+        default : ""
+    },
+    country: {
+        type: String,
+        default: ""
     },
     message: {
         type: String,
-        // required: true,
-        trim: true,
-        minlength: [0, 'Too short'],  // Minimum length for the message
-        maxlength: [100000, 'Too long']  // Maximum length for the message 
+        default: ""
     },
+
+    // company details
+    companyName: {
+        type: String,
+        default: ""
+    },
+    website_url: {
+        type: String,
+        default: ""
+    },
+    companyPhone: {
+        type: String,
+        default: ""
+    },
+    size: {
+        type: String,
+        default: ""
+    },
+    rating: {
+        type: String,
+        default: ""
+    },
+    reviews: {
+        type: String,
+        default: ""
+    },
+    minimumProjects: {
+        type: String,
+        default: ""
+    },
+    hourlyRate: {
+        type: String,
+        default: ""
+    },
+
+    // other details
     page_url: {
         type: String,
-        // required: true,
-        // trim: true,
-        // match: [/^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/, 'is invalid']  
-    },
-    status: {
-        type: String
+        default: ""
     },
     service: {
         type: String,
@@ -58,11 +84,20 @@ const customerEnquirySchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    website_url: {
+    seoActivity: {
         type: String,
         default: ""
     },
-    seoActivity: {
+
+    // extra
+    date: {
+        type: String
+    },
+    status: {
+        type: String,
+        default: ""
+    },
+    leadSource: {
         type: String,
         default: ""
     },
