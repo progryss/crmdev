@@ -6,7 +6,7 @@ import CustomerDetails from "./CustomerDetails";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-export default function Opportunity() {
+export default function Opportunity({countryList}) {
     const [columns3, setColumns3] = useState([]);
     const [data, setData] = useState([]);
     const [filteredResults, setFilteredResults] = useState([]);
@@ -20,8 +20,6 @@ export default function Opportunity() {
     const [viewingCustomer, setViewingCustomer] = useState(null);
     const [trigerUseeffectByDelete, setTrigerUseeffectByDelete] = useState(false);
     const tableHeaderRef = useRef(null);
-    const StatusArr = ["Open", "Qualified", "Unquailified", "Opportunity", "Lost", "Won", "Spam"]
-    const [filterOption, setFilterOption] = useState([])
 
     const searchItems = (searchValue) => {
         if (searchValue !== '') {
@@ -184,7 +182,7 @@ export default function Opportunity() {
     };
 
     if (viewingCustomer) {
-        return <CustomerDetails customer={viewingCustomer} onBack={() => setViewingCustomer(null)} />;
+        return <CustomerDetails customer={viewingCustomer} onBack={() => setViewingCustomer(null)} countryList={countryList}/>;
     }
 
     const handleSelectAll = () => {
@@ -234,7 +232,7 @@ export default function Opportunity() {
                                     <div className="d-flex align-items-center gap-2">
                                         <span><i className="fas fa-user fa-sm"></i></span>
                                         <span>
-                                            <h5 className="mb-0"><strong>Customer</strong></h5>
+                                            <h5 className="mb-0"><strong>Opportunities</strong></h5>
                                         </span>
                                     </div>
                                     <div className="searchParentWrapper">

@@ -20,7 +20,7 @@ export default function Customer({countryList}) {
   const [viewingCustomer, setViewingCustomer] = useState(null);
   const [trigerUseeffectByDelete, setTrigerUseeffectByDelete] = useState(false);
   const tableHeaderRef = useRef(null);
-  const StatusArr = ["Open", "Qualified", "Unquailified", "Opportunity", "Lost", "Won", "Spam"]
+  const StatusArr = ["Open", "Qualified", "Unqualified", "Opportunity", "Lost", "Won", "Spam"]
   const [filterOption, setFilterOption] = useState([])
 
   const searchItems = (searchValue) => {
