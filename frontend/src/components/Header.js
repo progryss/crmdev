@@ -36,6 +36,9 @@ const Header = ({ handleLogout }) => {
                                 <li className="nav-item">
                                     <NavLink className={`nav-link`} to="/database">Database</NavLink>
                                 </li>
+                                <li className="nav-item">
+                                    <NavLink className={`nav-link`} to="/opportunity">Opportunity</NavLink>
+                                </li>
                             </ul>
                         </nav>
                     </div>

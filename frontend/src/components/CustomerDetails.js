@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNotification } from "./NotificationContext";
 
-function CustomerDetails({ customer, onBack }) {
+function CustomerDetails({ customer, onBack, countryList }) {
 
   const baseURL = process.env.REACT_APP_BASE_URL || 'https://crm.progryss.com';
   const initialEditValues = {
@@ -71,6 +71,11 @@ function CustomerDetails({ customer, onBack }) {
   };
 
   const handleChangeStatus = (field, value) => {
+    setFlyObject(prev => ({ ...prev, [field]: value }));
+    setEditableValues(prev => ({ ...prev, [field]: value }))
+  };
+
+  const handleChangeLead = (field, value) => {
     setFlyObject(prev => ({ ...prev, [field]: value }));
     setEditableValues(prev => ({ ...prev, [field]: value }))
   };
@@ -207,7 +212,7 @@ function CustomerDetails({ customer, onBack }) {
             <select
               className="label-value"
               value={flyObject.leadSource}
-              // onChange={(e) => handleChange('leadSource', e.target.value)}
+              onChange={(e) => handleChangeLead('leadSource', e.target.value)}
               // disabled={isReadOnly}
             >
               <option value="">Select</option>
@@ -266,10 +271,9 @@ function CustomerDetails({ customer, onBack }) {
                     disabled={isReadOnly}
                   >
                     <option value="">Select Country</option>
-                    <option value="India">India</option>
-                    <option value="USA">USA</option>
-                    <option value="UK">UK</option>
-                    <option value="Australia">Australia</option>
+                    {countryList.map((element)=>(
+                      <option value={element}>{element}</option>
+                    ))}
                   </select>
                 </div>
                 <div className="mb-4">

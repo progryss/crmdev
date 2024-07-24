@@ -29,6 +29,7 @@ router.get('/h', allController.home);
 router.get('/get-enquiries', allController.getEnquiries);
 router.get('/get-company_data', allController.getCompanyData);
 
+router.post('/get-enquiries-by-status', allController.getEnquiriesBYStatus);
 router.post('/create-enquiry', allController.createEnquiry);
 router.post('/create-company', allController.createCompany);
 router.post('/upload-company_data',upload.single('jsonFile'),allController.uploadCompanyData)

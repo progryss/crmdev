@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useNotification } from "./NotificationContext"; // Adjust the path if necessary
 
-export default function AddCustomer() {
+export default function AddCustomer({ countryList }) {
   const navigate = useNavigate();
   const baseURL = process.env.REACT_APP_BASE_URL || 'https://crm.progryss.com';
 
@@ -259,10 +259,9 @@ export default function AddCustomer() {
                             onChange={(e) => setNewEnquiry({ ...newEnquiry, country: e.target.value })}
                           >
                             <option value="">Select Country</option>
-                            <option value="India">India</option>
-                            <option value="USA">USA</option>
-                            <option value="UK">UK</option>
-                            <option value="Australia">Australia</option>
+                            {countryList.map((element) => (
+                              <option value={element}>{element}</option>
+                            ))}
                           </select>
                         </div>
                         <div className="mb-4">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
@@ -6,7 +6,7 @@ import CustomerDetails from "./CustomerDetails";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-export default function Customer() {
+export default function Customer({countryList}) {
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState([]);
   const [filteredResults, setFilteredResults] = useState([]);
@@ -20,6 +20,8 @@ export default function Customer() {
   const [viewingCustomer, setViewingCustomer] = useState(null);
   const [trigerUseeffectByDelete, setTrigerUseeffectByDelete] = useState(false);
   const tableHeaderRef = useRef(null);
+  const StatusArr = ["Open", "Qualified", "Unquailified", "Opportunity", "Lost", "Won", "Spam"]
+  const [filterOption, setFilterOption] = useState([])
 
   const searchItems = (searchValue) => {
     if (searchValue !== '') {
@@ -49,10 +51,13 @@ export default function Customer() {
             const initialColumns = [
               { id: 'serialNumber', title: 'Sr No.' },
               { id: 'selectAll', title: 'Select All' },
-              ...keys.map(key => ({
-                id: key,
-                title: key.charAt(0).toUpperCase() + key.slice(1)
-              }))
+              { id: 'date', title: 'Date' },
+              { id: 'name', title: 'Name' },
+              { id: 'email', title: 'Email' },
+              { id: 'phone', title: 'Phone' },
+              { id: 'country', title: 'Country' },
+              { id: 'status', title: 'Status' },
+              { id: 'message', title: 'Message' }
             ];
             const savedColumns = JSON.parse(localStorage.getItem('columns'));
             if (savedColumns) {
@@ -61,12 +66,12 @@ export default function Customer() {
               setColumns(initialColumns);
             }
             const rowData = data.map((item, index) => ({ ...item, originalIndex: index }));
-            
+
             const enrichedData = [...rowData].reverse();
             setApiKeys(keys);
             setData(enrichedData);
             setFilteredResults(enrichedData);
-          }else{
+          } else {
             const rowData = data.map((item, index) => ({ ...item, originalIndex: index }));
             const enrichedData = [...rowData].reverse();
             setData(enrichedData);
@@ -80,8 +85,31 @@ export default function Customer() {
       }
     }
     hit()
-    // console.log('useeffect')
+    console.log('useeffect 1')
   }, [viewingCustomer, trigerUseeffectByDelete]);
+
+  useEffect(()=>{
+    async function getRes(){
+      if(filterOption.length > 0){
+        const response = await axios.post(`${baseURL}/api/get-enquiries-by-status`, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          data: {
+            statusArray : filterOption
+          }
+        });
+        setData(response.data);
+        setFilteredResults(response.data);
+      }else{
+        // setData(enrichedData);
+        // setFilteredResults(enrichedData);
+        setTrigerUseeffectByDelete(!trigerUseeffectByDelete)
+      }
+    }
+    getRes()
+    console.log('useeffect 2')
+  },[filterOption])
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
@@ -170,7 +198,7 @@ export default function Customer() {
   };
 
   if (viewingCustomer) {
-    return <CustomerDetails customer={viewingCustomer} onBack={() => setViewingCustomer(null)} />;
+    return <CustomerDetails customer={viewingCustomer} onBack={() => setViewingCustomer(null)} countryList={countryList}/>;
   }
 
   const handleSelectAll = () => {
@@ -189,7 +217,7 @@ export default function Customer() {
 
   const deleteRowFromTable = async () => {
     // console.log(selectedRows);
-    let userResponseText =  selectedRows.length === 0 ? "No data Selected" : `Are you sure you want to delete ${selectedRows.length} Enquiries?`;
+    let userResponseText = selectedRows.length === 0 ? "No data Selected" : `Are you sure you want to delete ${selectedRows.length} Enquiries?`;
     const userResponse = window.confirm(userResponseText);
     if (userResponse) {
       try {
@@ -208,6 +236,14 @@ export default function Customer() {
     setSelectedRows([])
   }
 
+  const handleEnquiriesBYStatus = async (event) => {
+    if (event.target.checked) {
+      setFilterOption(filterOption => ([...filterOption, event.target.value]));
+    } else {
+      setFilterOption(filterOption => filterOption.filter((item)=> item !== event.target.value))
+    }
+  }
+
   return (
 
     <div className="container-fluid customer-container">
@@ -223,15 +259,31 @@ export default function Customer() {
                       <h5 className="mb-0"><strong>Customer</strong></h5>
                     </span>
                   </div>
-                  <div>
+                  <div className="searchParentWrapper">
+                    <div className="input-group">
+                      <input
+                        type="text"
+                        className="form-control bg-custom border-end-0 search-input"
+                        placeholder="Search Customer"
+                        onChange={(e) => searchItems(e.target.value)}
+                      />
+                      <div className="input-group-append">
+                        <button
+                          className="btn border border-start-0 search-icon-custom"
+                          type="button"
+                        >
+                          <i className="fa fa-search"></i>
+                        </button>
+                      </div>
+                    </div>
                     <button
-                      className="btn btn-primary me-2 add-customer-btn" onClick={deleteRowFromTable}>
+                      className="btn btn-primary add-customer-btn" onClick={deleteRowFromTable}>
                       <i className="fa fa-trash"></i>
                     </button>
                     <button
-                      className="btn btn-primary ml-3 add-customer-btn"
+                      className="btn btn-primary add-customer-btn"
                     >
-                      <Link to='/add-enquiry' style={{ textDecoration: 'none' }}><i className="fas fa-plus"></i> Add Customer</Link>
+                      <Link to='/add-enquiry' style={{ textDecoration: 'none' }}><i className="fas fa-plus me-1"></i> Add Customer</Link>
                     </button>
                   </div>
                 </div>
@@ -245,22 +297,6 @@ export default function Customer() {
                   </div>
                   <div>
                     <div className="d-flex gap-2">
-                      <div className="input-group">
-                        <input
-                          type="text"
-                          className="form-control bg-custom border-end-0 search-input"
-                          placeholder="Search Customer"
-                          onChange={(e) => searchItems(e.target.value)}
-                        />
-                        <div className="input-group-append">
-                          <button
-                            className="btn border border-start-0 search-icon-custom"
-                            type="button"
-                          >
-                            <i className="fa fa-search"></i>
-                          </button>
-                        </div>
-                      </div>
                       <div className="dropdown">
                         <button
                           className="btn btn-primary ml-3 dropdown-toggle text-nowrap"
@@ -269,9 +305,35 @@ export default function Customer() {
                           data-bs-toggle="dropdown"
                           aria-expanded="false"
                         >
-                          <i className="fas fa-plus"></i> Add Column
+                          <i className="fas fa-filter me-2"></i> Status
                         </button>
-                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <ul className="dropdown-menu filterByStatus" aria-labelledby="dropdownMenuButton">
+                          {StatusArr.map((item) => (
+                            <li key={item}>
+                              <label className="dropdown-item">
+                                <input
+                                  type="checkbox"
+                                  value={item}
+                                  onChange={e => handleEnquiriesBYStatus(e)}
+                                // checked={columns.some(column => column.id === key)}
+                                /> {item}
+                              </label>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="dropdown">
+                        <button
+                          className="btn btn-primary ml-3 dropdown-toggle text-nowrap"
+                          type="button"
+                          id="dropdownMenuButton"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          <i className="fas fa-plus me-2"></i> Add Column
+                        </button>
+                        <ul className="dropdown-menu addCol" aria-labelledby="dropdownMenuButton">
                           {apiKeys.map((key) => (
                             <li key={key}>
                               <label className="dropdown-item">

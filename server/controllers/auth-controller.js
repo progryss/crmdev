@@ -16,6 +16,16 @@ const getEnquiries = async (req, res) => {
     }
 }
 
+const getEnquiriesBYStatus = async(req,res)=>{
+    const enquiryStatus = req.body.data.statusArray
+    try {
+        const response = await CustomerEnquiry.find({ status : enquiryStatus })
+        res.status(200).send(response)
+    } catch (error) {
+        
+    }
+}
+
 const getCompanyData = async (req, res) => {
     try {
         const response = await CompanyDatabase.find();
@@ -364,6 +374,7 @@ module.exports = {
     home,
     createEnquiry,
     getEnquiries,
+    getEnquiriesBYStatus,
     updateEnquiry,
     deleteEnquiry,
     deleteMultipleEnquiry,
