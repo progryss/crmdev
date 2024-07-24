@@ -3,10 +3,10 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
 import CustomerDetails from "./CustomerDetails";
-import { Link } from "react-router-dom";
+import { json, Link } from "react-router-dom";
 import axios from "axios";
 
-export default function Customer({countryList}) {
+export default function Customer({ countryList }) {
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState([]);
   const [filteredResults, setFilteredResults] = useState([]);
@@ -20,8 +20,8 @@ export default function Customer({countryList}) {
   const [viewingCustomer, setViewingCustomer] = useState(null);
   const [trigerUseeffectByDelete, setTrigerUseeffectByDelete] = useState(false);
   const tableHeaderRef = useRef(null);
-  const StatusArr = ["Open", "Qualified", "Unqualified", "Opportunity", "Lost", "Won", "Spam"]
-  const [filterOption, setFilterOption] = useState([])
+  const StatusArr = ["Open", "Qualified", "Unqualified", "Opportunity", "Lost", "Won", "Spam"];
+  const [filterOption, setFilterOption] = useState([]);
 
   const searchItems = (searchValue) => {
     if (searchValue !== '') {
@@ -89,27 +89,33 @@ export default function Customer({countryList}) {
   }, [viewingCustomer, trigerUseeffectByDelete]);
 
   useEffect(()=>{
-    async function getRes(){
-      if(filterOption.length > 0){
+    let savedStatus = localStorage.getItem('status');
+    if(savedStatus){
+      setFilterOption(JSON.parse(savedStatus))
+    }
+  },[])
+
+  useEffect(() => {
+    async function getRes() {
+      if (filterOption.length > 0) {
         const response = await axios.post(`${baseURL}/api/get-enquiries-by-status`, {
           headers: {
             'Content-Type': 'application/json'
           },
           data: {
-            statusArray : filterOption
+            statusArray: filterOption
           }
         });
         setData(response.data);
         setFilteredResults(response.data);
-      }else{
-        // setData(enrichedData);
-        // setFilteredResults(enrichedData);
+      } else {
         setTrigerUseeffectByDelete(!trigerUseeffectByDelete)
       }
     }
     getRes()
     console.log('useeffect 2')
-  },[filterOption])
+    localStorage.setItem('status',JSON.stringify(filterOption))
+  }, [filterOption])
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
@@ -198,7 +204,7 @@ export default function Customer({countryList}) {
   };
 
   if (viewingCustomer) {
-    return <CustomerDetails customer={viewingCustomer} onBack={() => setViewingCustomer(null)} countryList={countryList}/>;
+    return <CustomerDetails customer={viewingCustomer} onBack={() => setViewingCustomer(null)} countryList={countryList} />;
   }
 
   const handleSelectAll = () => {
@@ -240,7 +246,7 @@ export default function Customer({countryList}) {
     if (event.target.checked) {
       setFilterOption(filterOption => ([...filterOption, event.target.value]));
     } else {
-      setFilterOption(filterOption => filterOption.filter((item)=> item !== event.target.value))
+      setFilterOption(filterOption => filterOption.filter((item) => item !== event.target.value))
     }
   }
 
@@ -315,7 +321,7 @@ export default function Customer({countryList}) {
                                   type="checkbox"
                                   value={item}
                                   onChange={e => handleEnquiriesBYStatus(e)}
-                                // checked={columns.some(column => column.id === key)}
+                                  checked={filterOption.includes(item)}
                                 /> {item}
                               </label>
                             </li>
