@@ -84,7 +84,9 @@ export default function Customer({ countryList }) {
         setColumnWidths(savedWidths);
       }
     }
-    hit()
+    if(filterOption.length === 0){
+      hit()
+    }
     console.log('useeffect 1')
   }, [viewingCustomer, trigerUseeffectByDelete]);
 
