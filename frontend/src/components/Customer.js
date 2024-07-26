@@ -3,7 +3,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
 import CustomerDetails from "./CustomerDetails";
-import { json, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function Customer({ countryList }) {
@@ -22,6 +22,7 @@ export default function Customer({ countryList }) {
   const tableHeaderRef = useRef(null);
   const StatusArr = ["Open", "Qualified", "Unqualified", "Opportunity", "Lost", "Won", "Spam"];
   const [filterOption, setFilterOption] = useState([]);
+  const [demo, setDemo] = useState([]);
 
   const searchItems = (searchValue) => {
     if (searchValue !== '') {
@@ -85,17 +86,17 @@ export default function Customer({ countryList }) {
       }
     }
     if(filterOption.length === 0){
-      hit()
+    hit()
     }
     console.log('useeffect 1')
   }, [viewingCustomer, trigerUseeffectByDelete]);
 
-  useEffect(()=>{
+  useEffect(() => {
     let savedStatus = localStorage.getItem('status');
-    if(savedStatus){
+    if (savedStatus) {
       setFilterOption(JSON.parse(savedStatus))
     }
-  },[])
+  }, [])
 
   useEffect(() => {
     async function getRes() {
@@ -109,15 +110,14 @@ export default function Customer({ countryList }) {
           }
         });
         setData(response.data);
-        setFilteredResults(response.data);
+        setDemo(response.data)
       } else {
         setTrigerUseeffectByDelete(!trigerUseeffectByDelete)
       }
     }
     getRes()
-    console.log('useeffect 2')
-    localStorage.setItem('status',JSON.stringify(filterOption))
-  }, [filterOption])
+    localStorage.setItem('status', JSON.stringify(filterOption))
+  }, [filterOption, demo])
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
@@ -179,8 +179,14 @@ export default function Customer({ countryList }) {
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = filteredResults.slice(indexOfFirstRow, indexOfLastRow);
-  const totalPages = Math.ceil(filteredResults.length / rowsPerPage);
+  const currentRows = filterOption.length === 0 ? filteredResults.slice(indexOfFirstRow, indexOfLastRow) : demo.slice(indexOfFirstRow, indexOfLastRow);
+  let tp;
+  if (filterOption.length === 0) {
+    tp = filteredResults.length / rowsPerPage;
+  } else {
+    tp = demo.length / rowsPerPage;
+  }
+  const totalPages = Math.ceil(tp);
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
