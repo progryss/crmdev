@@ -88,6 +88,7 @@ async function createCompany(req, res) {
         const mappedEnquiry = {
             date: request.date,
             companyName: request.companyName,
+            companyPhone: request.companyPhone,
             websiteUrl: request.websiteUrl,
             profileLink: request.profileLink,
             rating: request.rating,
@@ -182,6 +183,7 @@ const updateCompany = async (req, res) => {
                 $set: {
                     date: updateData.date,
                     companyName: updateData.companyName,
+                    companyPhone: updateData.companyPhone,
                     websiteUrl: updateData.websiteUrl,
                     profileLink: updateData.profileLink,
                     rating: updateData.rating,
@@ -319,6 +321,7 @@ const uploadCompanyData = async (req, res) => {
         const transformedData = companyData.map(item => ({
             date: formatted,
             companyName: item.name,
+            companyPhone: item.companyPhone,
             websiteUrl: item.website,
             profileLink: item.profile_link,
             rating: item.rating,

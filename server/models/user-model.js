@@ -115,6 +115,10 @@ const companyDatabaseSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    companyPhone: {
+        type: String,
+        default: ""
+    },
     websiteUrl: {
         type: String,
         default: ""

@@ -66,9 +66,9 @@ function AppContent({ isLoggedIn, handleLogin, handleLogout }) {
                     <Route path="/login" element={isLoggedIn ? <Navigate to="/customer" /> : <LoginPage handleLogin={handleLogin} />} />
                     <Route path="/customer" element={isLoggedIn ? <Customer countryList={ countryList } /> : <Navigate to="/login" />} />
                     <Route path="/add-enquiry" element={<AddCustomer countryList={ countryList } />} />
-                    <Route path="/add-company" element={<AddCompany />} />
+                    <Route path="/add-company" element={<AddCompany countryList={ countryList } />} />
                     <Route path="*" element={<Navigate to={isLoggedIn ? "/customer" : "/login"} />} />
-                    <Route path="/database" element={isLoggedIn ? <Database /> : <Navigate to="/login" />} />
+                    <Route path="/database" element={isLoggedIn ? <Database countryList={ countryList } /> : <Navigate to="/login" />} />
                     <Route path="/opportunity" element={isLoggedIn ? <Opportunity countryList={countryList} /> : <Navigate to="/login" />} />
                 </Routes>
             </main>

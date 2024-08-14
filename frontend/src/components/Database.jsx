@@ -6,7 +6,7 @@ import CompanyDetails from "./companyDetails";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-export default function Database() {
+export default function Database({ countryList }) {
   const [companyData, setCompanyData] = useState(null);
 
 
@@ -88,7 +88,7 @@ export default function Database() {
     }
     hit()
     // console.log('useeffect')
-  }, [viewingCompany, trigerUseeffectByDelete,ep]);
+  }, [viewingCompany, trigerUseeffectByDelete, ep]);
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
@@ -177,7 +177,7 @@ export default function Database() {
   };
 
   if (viewingCompany) {
-    return <CompanyDetails company={viewingCompany} onBack={() => setViewingCompany(null)} />;
+    return <CompanyDetails company={viewingCompany} onBack={() => setViewingCompany(null)} countryList={countryList} />;
   }
 
   const handleSelectAll = () => {
@@ -195,8 +195,8 @@ export default function Database() {
   };
 
   const deleteRowFromTable = async () => {
-    // console.log(selectedRows);
-    let userResponseText =  selectedRows.length === 0 ? "No data Selected" : `Are you sure you want to delete ${selectedRows.length} Enquiries?`;
+    console.log(selectedRows);
+    let userResponseText = selectedRows.length === 0 ? "No data Selected" : `Are you sure you want to delete ${selectedRows.length} Enquiries?`;
     const userResponse = window.confirm(userResponseText);
     if (userResponse) {
       try {
@@ -213,29 +213,51 @@ export default function Database() {
       }
     }
     setSelectedRows([])
+    
   }
 
- 
+  const deleteAllRow = async()=>{
+    let allRowId = []
+    data.forEach(element => {
+      allRowId.push(element._id)
+    });
+    let userResponseText = allRowId.length === 0 ? "No data Selected" : `Are you sure you want to delete ${allRowId.length} Enquiries?`;
+    const userResponse = window.confirm(userResponseText);
+    if (userResponse) {
+      try {
+        const response = await axios.delete(`${baseURL}/api/delete-companies`, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          data: { ids: allRowId }
+        });
+        console.log(response.data);
+        setTrigerUseeffectByDelete(!trigerUseeffectByDelete)
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+  }
 
-  const uploadCompanyData = async(e) => {
+  const uploadCompanyData = async (e) => {
     e.preventDefault();
     if (!companyData) {
       alert('Please choose a file to upload !')
       return;
     }
-  
+
     try {
       const formData = new FormData();
       formData.append('jsonFile', companyData);
 
-      const response = await axios.post(`${baseURL}/api/upload-company_data`,formData);
+      const response = await axios.post(`${baseURL}/api/upload-company_data`, formData);
       console.log(response.data)
       setEp(!ep)
     } catch (error) {
-      console.log('error in sending file',error)
+      console.log('error in sending file', error)
     }
   }
-  const onUpload = (e)=>{
+  const onUpload = (e) => {
     setCompanyData(e.target.files[0])
   }
 
@@ -255,11 +277,11 @@ export default function Database() {
                     </span>
                   </div>
 
-                  <div style={{display:"flex"}}>
-                    <div style={{maxWidth:"400px"}} className="me-2">
-                      <form onSubmit={uploadCompanyData} style={{display:"flex",gap:"8px"}}>
-                        <input type="file" className="form-control bg-custom" onChange={onUpload} accept=".json"/>
-                        <button type="submit" className="btn btn-primary add-customer-btn" style={{minWidth:"115px"}}>Upload JSON</button>
+                  <div style={{ display: "flex" }}>
+                    <div style={{ maxWidth: "400px" }} className="me-2">
+                      <form onSubmit={uploadCompanyData} style={{ display: "flex", gap: "8px" }}>
+                        <input type="file" className="form-control bg-custom" onChange={onUpload} accept=".json" />
+                        <button type="submit" className="btn btn-primary add-customer-btn" style={{ minWidth: "115px" }}>Upload JSON</button>
                       </form>
                     </div>
                     <button
@@ -283,6 +305,14 @@ export default function Database() {
                   </div>
                   <div>
                     <div className="d-flex gap-2">
+                      <div style={{minWidth:"95px"}}>
+                        <button
+                          className="btn btn-primary add-customer-btn ml-3 delete-database"
+                          onClick={deleteAllRow}
+                        >
+                          Delete All
+                        </button>
+                      </div>
                       <div className="input-group">
                         <input
                           type="text"
@@ -309,7 +339,7 @@ export default function Database() {
                         >
                           <i className="fas fa-plus"></i> Add Column
                         </button>
-                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <ul className="dropdown-menu addCol" aria-labelledby="dropdownMenuButton">
                           {apiKeys.map((key) => (
                             <li key={key}>
                               <label className="dropdown-item">

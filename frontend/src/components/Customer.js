@@ -109,8 +109,10 @@ export default function Customer({ countryList }) {
             statusArray: filterOption
           }
         });
-        setData(response.data);
-        setDemo(response.data)
+        let c = response.data
+        let responseRev = c.reverse()
+        setData(responseRev);
+        setDemo(responseRev)
       } else {
         setTrigerUseeffectByDelete(!trigerUseeffectByDelete)
       }

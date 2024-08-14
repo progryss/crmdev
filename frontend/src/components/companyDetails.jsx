@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNotification } from "./NotificationContext";
 
-function CompanyDetails({ company, onBack }) {
+
+function CompanyDetails({ company, onBack, countryList }) {
 
     const baseURL = process.env.REACT_APP_BASE_URL || 'https://crm.progryss.com';
     const initialEditValues = {
         date: company.date,
         companyName: company.companyName,
+        companyPhone: company.companyPhone,
         websiteUrl: company.websiteUrl,
         profileLink: company.profileLink,
         rating: company.rating,
@@ -24,9 +26,10 @@ function CompanyDetails({ company, onBack }) {
         email: company.email,
         phone: company.phone,
         comments: company.comments,
-        status : company.status
+        status: company.status
     };
 
+    // const [commentsList, setCommentsList] = useState([]);
     const [comment, setComment] = useState("");
     const [isReadOnly, setIsReadOnly] = useState(true);
     const { showNotification } = useNotification();
@@ -55,6 +58,51 @@ function CompanyDetails({ company, onBack }) {
         // console.log('editing saved');
         setEditableValues(flyObject)
         setIsReadOnly(true);
+    }
+
+    const handleCopyObj = async ()=> {
+
+        const date = new Date();
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        const formatted = date.toLocaleDateString('en-US', options);
+        // Define the enquiry data
+        const customerData = {
+    
+          name: flyObject.name,
+          email: flyObject.email,
+          phone: flyObject.phone,
+          linkedinUrl: flyObject.linkedinUrl,
+          city: flyObject.city,
+          country: flyObject.country,
+    
+          companyName: flyObject.companyName,
+          website_url: flyObject.websiteUrl,
+          companyPhone: flyObject.companyPhone,
+          size: flyObject.size,
+          rating: flyObject.rating,
+          reviews: flyObject.reviews,
+          minimumProjects: flyObject.minimumProjects,
+          hourlyRate: flyObject.hourlyRate,
+    
+          date: formatted,
+          status: flyObject.status,
+          comments:editableValues.comments.map(comment => ({
+            comment_text: comment.comment_text,
+            comment_date: comment.comment_date
+          }))
+        };
+    
+        try {
+          // Make the POST request to create an enquiry
+          const response = await axios.post(`${baseURL}/api/create-enquiry`, customerData);
+          console.log(response.data);
+        //   navigate('/customer');
+        } catch (error) {
+          console.error('Error in sending enquiry:', error);
+        }
+    
+        // Simulate success notification
+        showNotification('Customer added successfully!', 'success', 'green', 'white');
     }
 
     const handleChange = (field, value) => {
@@ -172,26 +220,29 @@ function CompanyDetails({ company, onBack }) {
             <div className="card mb-3 status-card">
                 <div className="card-body">
                     <div className="btn-group" role="group" aria-label="Basic radio toggle button group">
-                        <input type="radio" className="btn-check" name="btnradio" id="btnradio1" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="open" checked={flyObject.status === "open" ? true : false} />
+                        <input type="radio" className="btn-check" name="btnradio" id="btnradio1" onClick={(e) => handleChangeStatus('status', e.target.value)} autocomplete="off" value="Open" checked={flyObject.status === "Open" ? true : false} />
                         <label className="btn btn-outline-primary" for="btnradio1">Open</label>
 
-                        <input type="radio" className="btn-check" name="btnradio" id="btnradio2" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="qualified" checked={flyObject.status === "qualified" ? true : false}/>
+                        <input type="radio" className="btn-check" name="btnradio" id="btnradio2" onClick={(e) => handleChangeStatus('status', e.target.value)} autocomplete="off" value="Qualified" checked={flyObject.status === "Qualified" ? true : false} />
                         <label className="btn btn-outline-primary" for="btnradio2">Qualified</label>
 
-                        <input type="radio" className="btn-check" name="btnradio" id="btnradio3" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="unqualified" checked={flyObject.status === "unqualified" ? true : false}/>
+                        <input type="radio" className="btn-check" name="btnradio" id="btnradio3" onClick={(e) => handleChangeStatus('status', e.target.value)} autocomplete="off" value="Unqualified" checked={flyObject.status === "Unqualified" ? true : false} />
                         <label className="btn btn-outline-primary" for="btnradio3">Unqualified</label>
 
-                        <input type="radio" className="btn-check" name="btnradio" id="btnradio4" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="opportunity" checked={flyObject.status === "opportunity" ? true : false}/>
+                        <input type="radio" className="btn-check" name="btnradio" id="btnradio4" onClick={(e) => handleChangeStatus('status', e.target.value)} autocomplete="off" value="Opportunity" checked={flyObject.status === "Opportunity" ? true : false} />
                         <label className="btn btn-outline-primary" for="btnradio4">Opportunity</label>
 
-                        <input type="radio" className="btn-check" name="btnradio" id="btnradio5" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="loss" checked={flyObject.status === "loss" ? true : false}/>
+                        <input type="radio" className="btn-check" name="btnradio" id="btnradio5" onClick={(e) => handleChangeStatus('status', e.target.value)} autocomplete="off" value="Loss" checked={flyObject.status === "Loss" ? true : false} />
                         <label className="btn btn-outline-primary" for="btnradio5">Lost</label>
 
-                        <input type="radio" className="btn-check" name="btnradio" id="btnradio6" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="won" checked={flyObject.status === "won" ? true : false}/>
+                        <input type="radio" className="btn-check" name="btnradio" id="btnradio6" onClick={(e) => handleChangeStatus('status', e.target.value)} autocomplete="off" value="Won" checked={flyObject.status === "Won" ? true : false} />
                         <label className="btn btn-outline-primary" for="btnradio6">Won</label>
 
-                        <input type="radio" className="btn-check" name="btnradio" id="btnradio7" onClick={(e)=> handleChangeStatus('status',e.target.value)} autocomplete="off" value="span" checked={flyObject.status === "span" ? true : false}/>
+                        <input type="radio" className="btn-check" name="btnradio" id="btnradio7" onClick={(e) => handleChangeStatus('status', e.target.value)} autocomplete="off" value="Spam" checked={flyObject.status === "Spam" ? true : false} />
                         <label className="btn btn-outline-primary" for="btnradio7">Spam</label>
+                    </div>
+                    <div style={{float:"right"}}>
+                        <button className="btn btn-primary" onClick={handleCopyObj}>Copy to Customer</button>
                     </div>
                 </div>
             </div>
@@ -214,6 +265,10 @@ function CompanyDetails({ company, onBack }) {
                                     <input className="label-value" onChange={(e) => handleChange('companyName', e.target.value)} value={flyObject.companyName} readOnly={isReadOnly} />
                                 </div>
                                 <div className="mb-4">
+                                    <div className="label-title">Company Phone:</div>
+                                    <input className="label-value" onChange={(e) => handleChange('companyPhone', e.target.value)} value={flyObject.companyPhone} readOnly={isReadOnly} />
+                                </div>
+                                <div className="mb-4">
                                     <div className="label-title">City:</div>
                                     <input className="label-value" onChange={(e) => handleChange('city', e.target.value)} value={flyObject.city} readOnly={isReadOnly} />
                                 </div>
@@ -226,10 +281,9 @@ function CompanyDetails({ company, onBack }) {
                                         disabled={isReadOnly}
                                     >
                                         <option value="">Select Country</option>
-                                        <option value="India">India</option>
-                                        <option value="USA">USA</option>
-                                        <option value="United Kingdom">United Kingdom</option>
-                                        <option value="Australia">Australia</option>
+                                        {countryList.map((element) => (
+                                            <option value={element}>{element}</option>
+                                        ))}
                                     </select>
                                 </div>
                                 <div className="mb-4">

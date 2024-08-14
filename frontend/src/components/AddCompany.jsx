@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useNotification } from "./NotificationContext"; // Adjust the path if necessary
 
-export default function AddCompany() {
+export default function AddCompany({ countryList }) {
     const navigate = useNavigate();
     const baseURL = process.env.REACT_APP_BASE_URL || 'https://crm.progryss.com';
 
@@ -16,6 +16,7 @@ export default function AddCompany() {
 
     const [company, setCompany] = useState({
         companyName: "",
+        companyPhone: "",
         websiteUrl: "",
         profileLink: "",
         rating: "",
@@ -89,6 +90,7 @@ export default function AddCompany() {
         const companyData = {
             date: formatted, // Use current date-time
             companyName: company.companyName,
+            companyPhone: company.companyPhone,
             websiteUrl: company.websiteUrl,
             profileLink: company.profileLink,
             rating: company.rating,
@@ -118,6 +120,7 @@ export default function AddCompany() {
 
             setCompany({
                 companyName: "",
+                companyPhone: "",
                 websiteUrl: "",
                 profileLink: "",
                 rating: "",
@@ -180,6 +183,17 @@ export default function AddCompany() {
                                                         value={company.companyName}
                                                         onChange={(event) => setCompany({ ...company, companyName: event.target.value })}
                                                         placeholder="Company name"
+                                                    />
+                                                </div>
+                                                <div className="mb-4">
+                                                    <label htmlFor="companyPhone" className="form-label label-value">Company Phone</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="companyPhone"
+                                                        value={company.companyPhone}
+                                                        onChange={(event) => setCompany({ ...company, companyPhone: event.target.value })}
+                                                        placeholder="Company phone"
                                                     />
                                                 </div>
                                                 <div className="mb-4">
@@ -250,15 +264,22 @@ export default function AddCompany() {
                                                 </div>
                                                 <div className="mb-4">
                                                     <label htmlFor="country" className="form-label label-value">Country</label>
-                                                    <input
-                                                        type="text"
+                                                    <select
                                                         className="form-control"
                                                         id="country"
                                                         value={company.country}
                                                         onChange={(event) => setCompany({ ...company, country: event.target.value })}
-                                                        placeholder=""
-                                                    />
+                                                    >
+                                                        <option value="">Select Country</option>
+                                                        {countryList.map((element) => (
+                                                            <option value={element}>{element}</option>
+                                                        ))}
+                                                    </select>
                                                 </div>
+
+
+
+
                                                 <div className="mb-4">
                                                     <label htmlFor="servicesProvided" className="form-label label-value">Services Provided</label>
                                                     <input
