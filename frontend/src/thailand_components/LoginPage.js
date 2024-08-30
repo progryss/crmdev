@@ -41,8 +41,8 @@ export default function ThailandLoginPage({ handleLogin }) {
       return;
     }
 
-    const validUsername = 'admin@thailand.com';
-    const validPassword = 'thailand@13579';
+    const validUsername = 'admin@thailand-tourism.net';
+    const validPassword = 'Thailand@13579';
 
     if (username !== validUsername) {
       setUsernameError('Invalid username');
@@ -60,7 +60,7 @@ export default function ThailandLoginPage({ handleLogin }) {
     <div className="d-flex justify-content-center align-items-center">
       <div className="card shadow login-box-width">
         <div className="card-body">
-          <div className="card-title text-center mb-4"><img src="progryss-logo.svg" alt="" width="125"></img></div>
+          <div className="card-title text-center mb-4"><img src="../thailand.svg" alt="" width="125"></img></div>
           <form onSubmit={handleSubmit}>
             <div className="form-group mb-3">
               <label htmlFor="username" className='label-value'>Username</label>
