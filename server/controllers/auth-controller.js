@@ -1,4 +1,4 @@
-const { CustomerEnquiry, CompanyDatabase } = require('../models/user-model');
+const { CustomerEnquiry, CompanyDatabase, CustomerEnquiryThailand } = require('../models/user-model');
 require("dotenv").config();
 const fs = require('fs').promises;
 const path = require('path');
@@ -372,6 +372,128 @@ const uploadCompanyData = async (req, res) => {
 
 
 
+// thailand
+const getEnquiriesThailand = async (req, res) => {
+    try {
+        const response = await CustomerEnquiryThailand.find();
+        res.status(201).send(response)
+    } catch (error) {
+        res.status(500).send('error in fetching enquires from server')
+    }
+}
+const getEnquiriesBYStatusThailand = async(req,res)=>{
+    const enquiryStatus = req.body.data.statusArray
+    try {
+        const response = await CustomerEnquiryThailand.find({ status : enquiryStatus })
+        res.status(200).send(response)
+    } catch (error) {
+        
+    }
+}
+async function createEnquiryThailand(req, res) {
+    try {
+        const request = await req.body;
+        const mappedEnquiry = {
+            
+            name: request.name,
+            email: request.email,
+            phone: request.phone,
+            month: request.month,
+            currentLocation: request.currentLocation,
+            noOfRooms: request.noOfRooms,
+            page_url: request.page_url,
+            date: request.date,
+            status: request.status,
+            comments: request.comments.map(comment => ({
+                comment_text: comment.comment_text,
+                comment_date: comment.comment_date
+            }))
+            
+        };
+        const newEnquiry = new CustomerEnquiryThailand(mappedEnquiry);
+        await newEnquiry.save();
+        res.status(200).send('Customer enquiries have been saved.');
+    } catch (error) {
+        console.error('Error in getting form data ', error);
+        res.status(500).send('Error in getting form data');
+    }
+}
+const updateEnquiryThailand = async (req, res) => {
+    try {
+        const enquiryId = req.params.id;
+        const updateData = req.body;
+        const updatedEnquiry = await CustomerEnquiryThailand.findByIdAndUpdate(
+            enquiryId,
+            {
+                $set: {
+                    name: updateData.name,
+                    email: updateData.email,
+                    phone: updateData.phone,
+                    month: updateData.month,
+                    currentLocation: updateData.currentLocation,
+                    noOfRooms: updateData.noOfRooms,
+                    page_url: updateData.page_url,
+                    date: updateData.date,
+                    status: updateData.status,
+                    comments: updateData.comments.map(comment => ({
+                        comment_text: comment.comment_text,
+                        comment_date: comment.comment_date
+                    }))
+                }
+            },
+            { new: true, runValidators: true } // Options to return the updated document and run validation
+        );
+
+        if (!updatedEnquiry) {
+            return res.status(404).send('Enquiry not found');
+        }
+
+        res.status(200).send('Enquiry updated successfully');
+    } catch (error) {
+        console.error('Error Enquiry data:', error);
+        res.status(500).send('Error updating enquiry data');
+    }
+}
+const deleteEnquiryThailand = async (req, res) => {
+    try {
+        const enquiryId = req.params.id;
+
+        // Find and delete the enquiry by its ID
+        const deletedEnquiry = await CustomerEnquiryThailand.findByIdAndDelete(enquiryId)
+
+        if (!deletedEnquiry) {
+            return res.status(404).send('Enquiry not found');
+        }
+
+        res.status(200).send('Enquiry deleted successfully');
+    } catch (error) {
+        console.error('Error deleting enquiry:', error);
+        res.status(500).send('Error deleting enquiry');
+    }
+}
+const deleteMultipleEnquiryThailand = async (req, res) => {
+    try {
+        const enquiryIds = req.body.ids;
+        // Validate the input
+        if (!Array.isArray(enquiryIds) || enquiryIds.length === 0) {
+            return res.status(400).send('Invalid or no IDs provided');
+        }
+
+        // Perform the deletion
+        const result = await CustomerEnquiryThailand.deleteMany({
+            _id: { $in: enquiryIds }
+        });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).send('No enquiries found to delete');
+        }
+
+        return res.status(200).send(`${result.deletedCount} enquiries deleted successfully`);
+    } catch (error) {
+        console.error('Error deleting enquiries:', error);
+        res.status(500).send('Error deleting enquiries');
+    }
+}
 
 module.exports = {
     home,
@@ -386,7 +508,14 @@ module.exports = {
     createCompany,
     updateCompany,
     deleteCompany,
-    deleteMultipleCompanies
+    deleteMultipleCompanies,
+
+    createEnquiryThailand,
+    getEnquiriesThailand,
+    getEnquiriesBYStatusThailand,
+    updateEnquiryThailand,
+    deleteEnquiryThailand,
+    deleteMultipleEnquiryThailand
 };
 
 

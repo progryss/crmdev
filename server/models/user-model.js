@@ -194,7 +194,53 @@ const companyDatabaseSchema = new mongoose.Schema({
     }]
 })
 
-const CustomerEnquiry = mongoose.model('Enquiry', customerEnquirySchema);
-const CompanyDatabase = mongoose.model('Company', companyDatabaseSchema)
+const customerEnquiryThailandSchema = new mongoose.Schema({
+    
+    // user details
+    name: {
+        type: String,
+        default: ""
+    },
+    email: {
+        type: String,
+        default: ""
+    },
+    phone: {
+        type: String,
+        default: ""
+    },
+    month:{
+        type: String,
+        default: ""
+    },
+    currentLocation: {
+        type : String,
+        default : ""
+    },
+    noOfRooms: {
+        type : String,
+        default : ""
+    },
+    page_url: {
+        type: String,
+        default: ""
+    },
+    date: {
+        type: String
+    },
+    status: {
+        type: String,
+        default: ""
+    },
+    comments: [{
+        comment_text: { type: String },
+        comment_date: { type: String }
+    }]
+});
 
-module.exports = { CustomerEnquiry, CompanyDatabase };
+
+const CustomerEnquiry = mongoose.model('Enquiry', customerEnquirySchema);
+const CompanyDatabase = mongoose.model('Company', companyDatabaseSchema);
+const CustomerEnquiryThailand = mongoose.model('Thailand Enquiry', customerEnquiryThailandSchema);
+
+module.exports = { CustomerEnquiry, CompanyDatabase, CustomerEnquiryThailand };

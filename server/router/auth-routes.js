@@ -42,5 +42,11 @@ router.delete('/delete-company/:id', allController.deleteCompany);
 router.delete('/delete-enquiries', allController.deleteMultipleEnquiry);
 router.delete('/delete-companies', allController.deleteMultipleCompanies);
 
+router.get('/thailand/get-enquiries', allController.getEnquiriesThailand);
+router.post('/thailand/get-enquiries-by-status', allController.getEnquiriesBYStatusThailand);
+router.post('/thailand/create-enquiry', allController.createEnquiryThailand);
+router.put('/thailand/update-enquiry/:id', allController.updateEnquiryThailand);
+router.delete('/thailand/delete-enquiry/:id', allController.deleteEnquiryThailand);
+router.delete('/thailand/delete-enquiries', allController.deleteMultipleEnquiryThailand);
 
 module.exports = router; 

@@ -6,7 +6,7 @@ import CustomerDetails from "./CustomerDetails";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-export default function Customer({ countryList }) {
+export default function ThailandCustomer() {
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState([]);
   const [filteredResults, setFilteredResults] = useState([]);
@@ -44,7 +44,7 @@ export default function Customer({ countryList }) {
 
   useEffect(() => {
     function hit() {
-      fetch(`${baseURL}/api/get-enquiries`)
+      fetch(`${baseURL}/api/thailand/get-enquiries`)
         .then(response => response.json())
         .then(data => {
           if (data.length > 0) {
@@ -56,11 +56,12 @@ export default function Customer({ countryList }) {
               { id: 'name', title: 'Name' },
               { id: 'email', title: 'Email' },
               { id: 'phone', title: 'Phone' },
-              { id: 'country', title: 'Country' },
+              { id: 'month', title: 'Month' },
+              { id: 'currentLocation', title: 'Current Location'},
+              { id: 'noOfRooms', title: 'No of Rooms'},
               { id: 'status', title: 'Status' },
-              { id: 'message', title: 'Message' }
             ];
-            const savedColumns = JSON.parse(localStorage.getItem('columns'));
+            const savedColumns = JSON.parse(localStorage.getItem('columnsThailand'));
             if (savedColumns) {
               setColumns(savedColumns);
             } else {
@@ -80,7 +81,7 @@ export default function Customer({ countryList }) {
             setSelectAll(!selectAll);
           }
         });
-      const savedWidths = JSON.parse(localStorage.getItem('columnWidths'));
+      const savedWidths = JSON.parse(localStorage.getItem('columnWidthsThailand'));
       if (savedWidths) {
         setColumnWidths(savedWidths);
       }
@@ -92,7 +93,7 @@ export default function Customer({ countryList }) {
   }, [viewingCustomer, trigerUseeffectByDelete]);
 
   useEffect(() => {
-    let savedStatus = localStorage.getItem('status');
+    let savedStatus = localStorage.getItem('statusThailand');
     if (savedStatus) {
       setFilterOption(JSON.parse(savedStatus))
     }
@@ -101,7 +102,7 @@ export default function Customer({ countryList }) {
   useEffect(() => {
     async function getRes() {
       if (filterOption.length > 0) {
-        const response = await axios.post(`${baseURL}/api/get-enquiries-by-status`, {
+        const response = await axios.post(`${baseURL}/api/thailand/get-enquiries-by-status`, {
           headers: {
             'Content-Type': 'application/json'
           },
@@ -118,9 +119,8 @@ export default function Customer({ countryList }) {
       }
     }
     getRes()
-    localStorage.setItem('status', JSON.stringify(filterOption))
+    localStorage.setItem('statusThailand', JSON.stringify(filterOption))
   }, [filterOption, demo])
-
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
@@ -130,7 +130,7 @@ export default function Customer({ countryList }) {
       updatedColumns.splice(result.destination.index, 0, reorderedColumn);
     }
     setColumns(updatedColumns);
-    localStorage.setItem('columns', JSON.stringify(updatedColumns));
+    localStorage.setItem('columnsThailand', JSON.stringify(updatedColumns));
   };
 
   const handleToggleColumn = (key) => {
@@ -143,7 +143,7 @@ export default function Customer({ countryList }) {
       updatedColumns = [...columns, newColumn];
     }
     setColumns(updatedColumns);
-    localStorage.setItem('columns', JSON.stringify(updatedColumns));
+    localStorage.setItem('columnsThailand', JSON.stringify(updatedColumns));
   };
 
   const isDate = (value) => {
@@ -166,7 +166,6 @@ export default function Customer({ countryList }) {
         aValue = new Date(aValue);
         bValue = new Date(bValue);
       }
-      
       if (aValue < bValue) {
         return direction === 'ascending' ? -1 : 1;
       }
@@ -211,11 +210,11 @@ export default function Customer({ countryList }) {
       [columnId]: width
     };
     setColumnWidths(updatedWidths);
-    localStorage.setItem('columnWidths', JSON.stringify(updatedWidths));
+    localStorage.setItem('columnWidthsThailand', JSON.stringify(updatedWidths));
   };
 
   if (viewingCustomer) {
-    return <CustomerDetails customer={viewingCustomer} onBack={() => setViewingCustomer(null)} countryList={countryList} />;
+    return <CustomerDetails customer={viewingCustomer} onBack={() => setViewingCustomer(null)} />;
   }
 
   const handleSelectAll = () => {
@@ -238,7 +237,7 @@ export default function Customer({ countryList }) {
     const userResponse = window.confirm(userResponseText);
     if (userResponse) {
       try {
-        const response = await axios.delete(`${baseURL}/api/delete-enquiries`, {
+        const response = await axios.delete(`${baseURL}/api/thailand/delete-enquiries`, {
           headers: {
             'Content-Type': 'application/json'
           },
@@ -300,7 +299,7 @@ export default function Customer({ countryList }) {
                     <button
                       className="btn btn-primary add-customer-btn"
                     >
-                      <Link to='/add-enquiry' style={{ textDecoration: 'none' }}><i className="fas fa-plus me-1"></i> Add Customer</Link>
+                      <Link to='/thailand/add-enquiry' style={{ textDecoration: 'none' }}><i className="fas fa-plus me-1"></i> Add Customer</Link>
                     </button>
                   </div>
                 </div>
@@ -325,8 +324,8 @@ export default function Customer({ countryList }) {
                           <i className="fas fa-filter me-2"></i> Status
                         </button>
                         <ul className="dropdown-menu filterByStatus" aria-labelledby="dropdownMenuButton">
-                          {StatusArr.map((item) => (
-                            <li key={item}>
+                          {StatusArr.map((item,index) => (
+                            <li key={index}>
                               <label className="dropdown-item">
                                 <input
                                   type="checkbox"
@@ -351,8 +350,8 @@ export default function Customer({ countryList }) {
                           <i className="fas fa-plus me-2"></i> Add Column
                         </button>
                         <ul className="dropdown-menu addCol" aria-labelledby="dropdownMenuButton">
-                          {apiKeys.map((key) => (
-                            <li key={key}>
+                          {apiKeys.map((key,index) => (
+                            <li key={index}>
                               <label className="dropdown-item">
                                 <input
                                   type="checkbox"
@@ -380,14 +379,13 @@ export default function Customer({ countryList }) {
                       <tr ref={provided.innerRef} {...provided.droppableProps}>
                         {columns.map((column, index) => (
                           <Draggable
-                            key={column.id}
+                            key={`${column.id}-${index}`}
                             draggableId={column.id}
                             index={index}
                             isDragDisabled={index === 0 || index === 1}
                           >
                             {(provided) => (
                               <th
-                                key={column.id}
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 className="text-center"
@@ -488,7 +486,7 @@ export default function Customer({ countryList }) {
                   ) : (
                     <tr>
                       <td colSpan={columns.length} className="text-center">
-                        No results found
+                        
                       </td>
                     </tr>
                   )}

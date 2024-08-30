@@ -1,6 +1,6 @@
 // App.js
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import './App.css';
 import Customer from './components/Customer';
@@ -11,7 +11,17 @@ import AddCustomer from './components/AddCustomer';
 import AddCompany from './components/AddCompany';
 import Opportunity from './components/opportunity';
 
-function App() {
+
+import ThailandHeader from './thailand_components/Header';
+import ThailandCustomer from './thailand_components/Customer';
+import ThailandLoginPage from './thailand_components/LoginPage';
+import ThailandAddCustomer from './thailand_components/AddCustomer';
+import ThailandOpportunity from './thailand_components/opportunity';
+
+
+export default function App() {
+
+    const location = useLocation();
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -31,20 +41,45 @@ function App() {
     const handleLogin = () => {
         setIsLoggedIn(true);
         localStorage.setItem('isLoggedIn', 'true');
-    };
+    }
 
     const handleLogout = () => {
         setIsLoggedIn(false);
         localStorage.setItem('isLoggedIn', 'false');
+    }
+
+    const [isLoggedInThailand, setIsLoggedInThailand] = useState(false);
+
+    useEffect(() => {
+        const isAppInitializedThailand = sessionStorage.getItem('isAppInitializedThailand');
+
+        if (!isAppInitializedThailand) {
+            localStorage.setItem('isLoggedInThailand', 'false');
+            sessionStorage.setItem('isAppInitializedThailand', 'true');
+            setIsLoggedInThailand(false);
+        } else {
+            const loggedInThailand = localStorage.getItem('isLoggedInThailand') === 'true';
+            setIsLoggedInThailand(loggedInThailand);
+        }
+    }, []);
+
+    const handleLoginThailand = () => {
+        setIsLoggedInThailand(true);
+        localStorage.setItem('isLoggedInThailand', 'true');
     };
 
+    const handleLogoutThailand = () => {
+        setIsLoggedInThailand(false);
+        localStorage.setItem('isLoggedInThailand', 'false');
+    };
+
+
+    
     return (
-        <NotificationProvider> {/* Wrap the Router with NotificationProvider */}
-            <Router>
+        <NotificationProvider>
                 <div className="App">
-                    <AppContent isLoggedIn={isLoggedIn} handleLogin={handleLogin} handleLogout={handleLogout} />
+                    {location.pathname.startsWith('/thailand') ? <AppContentThailand isLoggedIn={isLoggedInThailand} handleLogin={handleLoginThailand} handleLogout={handleLogoutThailand} /> : <AppContent isLoggedIn={isLoggedIn} handleLogin={handleLogin} handleLogout={handleLogout} />}
                 </div>
-            </Router>
         </NotificationProvider>
     );
 }
@@ -64,11 +99,11 @@ function AppContent({ isLoggedIn, handleLogin, handleLogout }) {
                 <Routes>
                     <Route path="/" element={<Navigate to={isLoggedIn ? "/customer" : "/login"} />} />
                     <Route path="/login" element={isLoggedIn ? <Navigate to="/customer" /> : <LoginPage handleLogin={handleLogin} />} />
-                    <Route path="/customer" element={isLoggedIn ? <Customer countryList={ countryList } /> : <Navigate to="/login" />} />
-                    <Route path="/add-enquiry" element={<AddCustomer countryList={ countryList } />} />
-                    <Route path="/add-company" element={<AddCompany countryList={ countryList } />} />
+                    <Route path="/customer" element={isLoggedIn ? <Customer countryList={countryList} /> : <Navigate to="/login" />} />
+                    <Route path="/add-enquiry" element={<AddCustomer countryList={countryList} />} />
+                    <Route path="/add-company" element={<AddCompany countryList={countryList} />} />
                     <Route path="*" element={<Navigate to={isLoggedIn ? "/customer" : "/login"} />} />
-                    <Route path="/database" element={isLoggedIn ? <Database countryList={ countryList } /> : <Navigate to="/login" />} />
+                    <Route path="/database" element={isLoggedIn ? <Database countryList={countryList} /> : <Navigate to="/login" />} />
                     <Route path="/opportunity" element={isLoggedIn ? <Opportunity countryList={countryList} /> : <Navigate to="/login" />} />
                 </Routes>
             </main>
@@ -76,4 +111,26 @@ function AppContent({ isLoggedIn, handleLogin, handleLogout }) {
     );
 }
 
-export default App;
+function AppContentThailand({ isLoggedIn, handleLogin, handleLogout }) {
+    const location = useLocation();
+    const shouldDisplayHeader = () => {
+        return !location.pathname.startsWith('/thailand/login');
+    };
+
+    return (
+        <>
+            {shouldDisplayHeader() && <ThailandHeader handleLogout={handleLogout} />}
+            <main className="main-content-css">
+                <Routes>
+                    <Route path="/thailand" element={<Navigate to={isLoggedIn ? "/thailand/customer" : "/thailand/login"} />} />
+                    <Route path="/thailand/login" element={isLoggedIn ? <Navigate to="/thailand/customer" /> : <ThailandLoginPage handleLogin={handleLogin} />} />
+                    <Route path="/thailand/customer" element={isLoggedIn ? <ThailandCustomer /> : <Navigate to="/thailand/login" />} />
+                    <Route path="/thailand/add-enquiry" element={<ThailandAddCustomer />} />
+                    <Route path="/thailand/*" element={<Navigate to={isLoggedIn ? "/thailand/customer" : "/thailand/login"} />} />
+                    <Route path="/thailand/opportunity" element={isLoggedIn ? <ThailandOpportunity /> : <Navigate to="/thailand/login" />} />
+                </Routes>
+            </main>
+        </>
+    );
+}
+
